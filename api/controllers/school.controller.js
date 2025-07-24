@@ -107,7 +107,7 @@ export const getAllSchools = async (req, res) => {
 
 export const getSchoolOwnData = async (req, res) => {
   try {
-    const id = '';
+    const id = req.user.id;
     const school = await School.findById({_id: id})
     if(!school) {
       return res.status(404).json({ success: false, message: "School not found." });
@@ -123,7 +123,7 @@ export const getSchoolOwnData = async (req, res) => {
 
 export const updateSchool = async(req, res) => {
   try {
-    const id = '';
+    const id = req.user.id;
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
 
