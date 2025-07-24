@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import schoolRouter from "./routers/school.route.js"
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.use(cookieParser())
  }).catch(err => {
      console.log("Database is not connected ", err)
  })
+
+ app.use('/api/school', schoolRouter)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
