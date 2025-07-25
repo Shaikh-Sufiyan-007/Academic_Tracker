@@ -10,6 +10,10 @@ import Schedule from './school/components/schedule/Schedule'
 import Students from './school/components/students/Students'
 import Subjects from './school/components/subjects/Subjects'
 import Teachers from './school/components/teachers/Teachers'
+import Client from './client/Client'
+import Home from './client/components/home/Home'
+import Login from './client/components/login/Login'
+import Register from './client/components/register/Register'
 
 function App() {
 
@@ -38,6 +42,11 @@ function App() {
           {/* TEACHER ROUTE */}
 
           {/* CLIENT ROUTE */}
+          <Route path='/' element={<Client />} >
+            <Route index element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
