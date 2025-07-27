@@ -20,6 +20,12 @@ import ScheduleTeacher from './teacher/schedule/ScheduleTeacher'
 import AttendanceTeacher from './teacher/attendance/AttendanceTeacher'
 import ExaminationsTeacher from './teacher/examinations/ExaminationsTeacher'
 import NoticeTeacher from './teacher/notice/NoticeTeacher'
+import Student from './student/Student'
+import StudentDetails from './student/components/student_datails/StudentDetails'
+import ScheduleStudent from './student/components/schedule/ScheduleStudent'
+import AttendanceStudent from './student/components/attedance/AttendanceStudent'
+import ExaminationStudent from './student/components/examination/ExaminationStudent'
+import NoticeStudent from './student/components/notice/NoticeStudent'
 
 function App() {
 
@@ -44,6 +50,14 @@ function App() {
           </Route>
 
           {/* STUDENT ROUTE */}
+
+          <Route path='student' element={<Student />}>
+            <Route index element={StudentDetails} />
+            <Route path='schedule' element={ScheduleStudent} />
+            <Route path='attendance' element={AttendanceStudent} />
+            <Route path='examinations' element={ExaminationStudent} />
+            <Route path='notice' element={NoticeStudent} />
+          </Route>
 
           {/* TEACHER ROUTE */}
 

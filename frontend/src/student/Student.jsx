@@ -111,7 +111,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function Teacher() {
+export default function Student() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -124,11 +124,11 @@ export default function Teacher() {
   };
 
   const navArr = [
-    {link: '/teacher', component: "Your Details", icon: DashboardCustomizeIcon },
-    {link: '/teacher/schedule', component: "Schedule", icon: EventIcon},
-    {link: '/teacher/attendance', component: "Attendance", icon: BarChartIcon},
-    {link: '/teacher/examinations', component: "Examinations", icon: ExplicitIcon},
-    {link: '/teacher/notice', component: "Notice", icon: NotificationsIcon},
+    {link: '/student', component: "Your Details", icon: DashboardCustomizeIcon },
+    {link: '/student/schedule', component: "Schedule", icon: EventIcon},
+    {link: '/student/attendance', component: "Attendance", icon: BarChartIcon},
+    {link: '/student/examinations', component: "Examinations", icon: ExplicitIcon},
+    {link: '/student/notice', component: "Notice", icon: NotificationsIcon},
   ]
 
   const navigate = useNavigate()
