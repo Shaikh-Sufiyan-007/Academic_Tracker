@@ -29,6 +29,8 @@ import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import ExplicitIcon from '@mui/icons-material/Explicit';
 import BarChartIcon from '@mui/icons-material/BarChart'
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import HomeIcon from '@mui/icons-material/Home';
+
 
 
 const drawerWidth = 240;
@@ -124,6 +126,7 @@ export default function School() {
   };
 
   const navArr = [
+    {link: '/', component: "Home", icon: HomeIcon },
     {link: '/school', component: "Dashboard", icon: DashboardCustomizeIcon },
     {link: '/school/class', component: "Class", icon: FormatListNumberedIcon},
     {link: '/school/subjects', component: "Subject", icon: AutoStoriesIcon},
