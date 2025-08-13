@@ -8,6 +8,7 @@ import { useState } from "react";
 import CardMedia from "@mui/material/CardMedia";
 import { useRef } from "react";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
 
 export default function Register() {
 
@@ -40,8 +41,20 @@ export default function Register() {
     validationSchema: registerSchema,
     onSubmit: (values) => {
       console.log("Register submit values: ", values);
-      Formik.resetForm();
-      handleClearFile()
+      const formData = new FormData();
+      formData.append("image", file, file.name);
+      formData.append("school_name", values.school_name)
+      formData.append("email", values.email)
+      formData.append("owner_name", values.owner_name)
+      formData.append("password", values.password)
+
+      axios.post(`http://localhost:5000/api/school/register`, formData).then(res => {
+        console.log(res)
+        Formik.resetForm();
+        handleClearFile()
+      }).catch(e => {
+        console.log("Error in register: ", e)
+      })
     },
   });
 

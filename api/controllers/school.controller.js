@@ -6,6 +6,7 @@ dotenv.config();
 import fs from "fs";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { fileURLToPath } from "url";
 
 // AUTHENTICATION - SCHOOL, STUDENT AND TEACHER
 
@@ -13,24 +14,28 @@ export const registerSchool = async (req, res) => {
   try {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
-      const photo = files.image[0];
+      const school = await School.findOne({ email: fields.email });
+      if(school) {
+        return res.status(409).json({ success: false, message: "School already exists." });
+      }
+        
+      const photo = files.image;
       let filepath = photo.filepath;
       let originalFilename = photo.originalFilename.replace(" ", "_");
-      let newPath = path.join(
-        __dirname,
-        process.env.SCHOOL_IMAGE_PATH,
-        originalFilename
-      );
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.dirname(__filename);
+      let newPath = path.join(__dirname,process.env.SCHOOL_IMAGE_PATH,originalFilename);
 
       let photoData = fs.readFileSync(filepath);
       fs.writeFileSync(newPath, photoData);
 
-      const salt = bcrypt.genSaltSync(10);
-      const hashPassword = bcrypt.hash(fields.password[0], salt);
+      const salt = await bcrypt.genSaltSync(10);
+      const hashPassword = await bcrypt.hash(fields.password[0], salt);
       const newSchool = new School({
-        school_name: fields.school_name[0],
-        email: fields.email[0],
-        owner_name: fields.owner_name[0],
+        school_name: fields.school_name,
+        email: fields.email,
+        owner_name: fields.owner_name,
+        school_image: originalFilename,
         password: hashPassword,
       });
 
