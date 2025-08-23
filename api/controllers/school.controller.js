@@ -30,7 +30,7 @@ export const registerSchool = async (req, res) => {
       fs.writeFileSync(newPath, photoData);
 
       const salt = await bcrypt.genSaltSync(10);
-      const hashPassword = await bcrypt.hash(fields.password[0], salt);
+      const hashPassword = await bcrypt.hash(fields.password, salt);
       const newSchool = new School({
         school_name: fields.school_name,
         email: fields.email,
@@ -59,41 +59,38 @@ export const loginSchool = async (req, res) => {
     const { email, password } = req.body;
 
     const school = await School.findOne({ email });
-    if (!school) {
-      return res
-        .status(404)
-        .json({ success: false, message: "School not found." });
-    }
-
+    if (school) {
     const isAuth = bcrypt.compareSync(password, school.password);
-    if (!isAuth) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid credentials." });
-    }
-
-    const jwtSecret = process.env.JWT_SECRET;
-    const token = jwt.sign({
-        id: school._id,
-        schoolId: school._id,
-        owner_name: school.owner_name,
-        school_name: school.school_name,
-        image_url: school.school_image,
-        role: "SCHOOL"}, jwtSecret);
+    if (isAuth) {
+        const jwtSecret = process.env.JWT_SECRET;
+        const token = jwt.sign({
+            id: school._id,
+            schoolId: school._id,
+            owner_name: school.owner_name,
+            school_name: school.school_name,
+            image_url: school.school_image,
+            role: "SCHOOL"}, jwtSecret);
+        
+        res.header("Authorization", token)
     
-    res.header("Authorization", token)
-
-    res.status(200).json({
-      success: true,
-      message: "School logged in successfully.",
-      user: {
-        id: school._id,
-        owner_name: school.owner_name,
-        school_name: school.school_name,
-        image_url: school.school_image,
-        role: "SCHOOL"
-      },
-    });
+        res.status(200).json({
+          success: true,
+          message: "School logged in successfully.",
+          user: {
+            id: school._id,
+            owner_name: school.owner_name,
+            school_name: school.school_name,
+            image_url: school.school_image,
+            role: "SCHOOL"
+          },
+    
+        });
+    } else {
+        res.status(401).json({ success: false, message: "Invalid credentials." });
+    }
+  } else {
+    res.status(404).json({ success: false, message: "School not found." });
+  }
   } catch (error) {
     console.error("Error in loginSchool Controller :", error);
     res.status(500).json({ success: false, message: error.message });

@@ -77,20 +77,29 @@ export default function Register() {
   }
 
   return (
-    <>
+    <Box component={'div'} sx={{
+      background: "url(https://images.quiz-maker.com/images/bb8c3b97-ef1f-43b8-4c31-f29b3c35c600/public)",
+      height: "80vh",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      paddingTop: "60px",
+      paddingBottom: "60px"
+      }}>
       {message &&
         <MessageSnackbar message={message} messageType={messageType} handleClose={handleMessageClose} />}
-      
-      
+        <Typography variant="h2" sx={{textAlign: "center", color: "white"}}>Register</Typography>
+
       <Box
         component="form"
         sx={{
           "& > :not(style)": { m: 1 },
           display: "flex",
           flexDirection: "column",
-          width: "60vw",
+          width: "50vw",
           minWidth: "230px",
           margin: 'auto',
+          background: '#fff'
         }}
         noValidate
         autoComplete="off"
@@ -177,6 +186,6 @@ export default function Register() {
 
         <Button type="submit" variant="contained">Submit</Button>
       </Box>
-    </>
+    </Box>
   );
 }
