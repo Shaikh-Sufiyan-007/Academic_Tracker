@@ -50,16 +50,16 @@ export default function Login() {
   return (
     <Box component={'div'} sx={{
       background: "url(https://images.quiz-maker.com/images/bb8c3b97-ef1f-43b8-4c31-f29b3c35c600/public)",
-      height: "80vh",
+      height: "100%",
       backgroundSize: "cover",
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
+      minHeight: '80vh',
       paddingTop: "60px",
       paddingBottom: "60px"
       }}>
       {message &&
         <MessageSnackbar message={message} messageType={messageType} handleClose={handleMessageClose} />}
-        <Typography variant="h2" sx={{textAlign: "center", color: "white"}}>Login</Typography>
 
       <Box
         component="form"
@@ -77,7 +77,7 @@ export default function Login() {
         onSubmit={Formik.handleSubmit}
       >
 
-       
+       <Typography variant="h2" sx={{textAlign: "center"}}>Login</Typography>
         <TextField
           name="email"
           label="Email"

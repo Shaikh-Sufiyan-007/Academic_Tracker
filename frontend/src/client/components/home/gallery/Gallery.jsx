@@ -39,6 +39,7 @@ export default function Gallery() {
     }, [])
   return (
     <Box>
+        <Typography variant='h4' sx={{textAlign: 'center', marginTop: '40px', marginBottom: '40px'}}>Registered Schools</Typography>
         <ImageList sx={{ width: "100%", height: 'auto' }}>
         {schools.map((school) => (
             <ImageListItem key={school.school_image}>
