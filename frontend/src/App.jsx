@@ -27,11 +27,12 @@ import AttendanceStudent from './student/components/attedance/AttendanceStudent'
 import ExaminationStudent from './student/components/examination/ExaminationStudent'
 import NoticeStudent from './student/components/notice/NoticeStudent'
 import ProtectedRoute from './guard/ProtectedRoute'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
 
   return (
-    <>
+    <AuthProvider>
       <BrowserRouter>
         <Routes>
           {/* SCHOOL ROUTE */}
@@ -78,7 +79,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </AuthProvider>
   )
 }
 

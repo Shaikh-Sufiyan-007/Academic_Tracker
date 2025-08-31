@@ -1,15 +1,23 @@
+import { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext';
 
 const ProtectedRoute = ({children, allowedRoles=[]}) => {
 
-    const userRole = 'TEACHER';
-    const authenticated = true;
+    const {user, authenticated} = useContext(AuthContext)
+    const [checked, setChecked] = useState(false)
 
-    if(!authenticated) return <Navigate to={'/login'} />
+    useEffect(() => {
+      setChecked(true)
+    },[])
 
-    if(allowedRoles && !allowedRoles.includes(userRole)) return <Navigate to={'/login'} />
+    if(checked && !authenticated) return <Navigate to={'/login'} />
 
-  return children;
+    if(checked && allowedRoles && !allowedRoles.includes(user.role)) return <Navigate to={'/login'} />
+
+    if(checked) {
+        return children;
+    }
 }
 
 export default ProtectedRoute

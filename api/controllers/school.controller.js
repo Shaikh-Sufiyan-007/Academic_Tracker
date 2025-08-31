@@ -109,8 +109,9 @@ export const getAllSchools = async (req, res) => {
 
 export const getSchoolOwnData = async (req, res) => {
   try {
-    const id = req.user.id;
-    const school = await School.findById({_id: id})
+    const id = req.user.
+    id;
+    const school = await School.findById({_id: id}).select(['-password'])
     if(!school) {
       return res.status(404).json({ success: false, message: "School not found." });
     }
@@ -131,10 +132,11 @@ export const updateSchool = async(req, res) => {
 
       const school = await School.findOne({_id: id});
       if(files.image) {
-          const photo = files.image[0];
+          const photo = files.image;
           let filepath = photo.filepath;
           let originalFilename = photo.originalFilename.replace(" ", "_");
-
+          const __filename = fileURLToPath(import.meta.url);
+          const __dirname = path.dirname(__filename)
           if(school.school_image) {
               let oldImagePath = path.join(__dirname, process.env.SCHOOL_IMAGE_PATH, school.school_image);
               if(fs.existsSync(oldImagePath)) {
@@ -150,13 +152,16 @@ export const updateSchool = async(req, res) => {
           fs.writeFileSync(newPath, photoData);
 
           Object.keys(fields).forEach((field) => {
-            school[field] = fields[field][0]
+            school[field] = fields[field]
           })
-          await school.save();
-          res.status(200).json({ success: true, message: "School updated successfully.", school });
-      
+          school['school_image'] = originalFilename;
+          
+      } else {
+        school['school_name'] = fields.school_name;
       }
-
+      
+      await school.save();
+      res.status(200).json({ success: true, message: "School updated successfully.", school });
 
     });
 

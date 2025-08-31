@@ -1,16 +1,19 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Form, useFormik } from "formik";
 import Button from "@mui/material/Button";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import MessageSnackbar from "../../../basic-utility-components/snackbar/MessageSnackbar";
 import { loginSchema } from "../../../yupSchema/loginSchema";
+import { AuthContext } from "../../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-
+  const navigate = useNavigate()
+  const {login} = useContext(AuthContext)
+  
   const initialValues = {
     email: "",
     password: "",
@@ -27,10 +30,12 @@ export default function Login() {
         const user = res.data.user;
         if(user) {
           localStorage.setItem('user', JSON.stringify(user))
+          login(user)
         }
         setMessage(res.data.message)
         setMessageType('success')
         Formik.resetForm();
+        navigate('/school')
       }).catch(e => {
         setMessage(e.response.data.message)
         setMessageType("error")
