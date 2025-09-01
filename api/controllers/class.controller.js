@@ -19,6 +19,18 @@ export const createClass = async (req, res) => {
     }
 }
 
+export const getAllClasses = async (req, res) => {
+    try {
+        const schoolId = req.user.schoolId;
+        const allClasses = await Class.find({ school: schoolId });
+        res.status(200).json({ success: true, message: "Classes fetched successfully.", data: allClasses });
+        
+    } catch (error) {
+        console.log("Error in getAllClasses Controller :", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
 export const updateClassWithId = async(req, res) => {
     try {
         let id = req.params.id;
