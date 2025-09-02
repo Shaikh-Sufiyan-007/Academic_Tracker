@@ -9,6 +9,8 @@ export const createClass = async (req, res) => {
             school: req.user.schoolId,
             class_text: req.body.class_text,
             class_num: req.body.class_num,
+            branch_code: req.body.branch_code,
+            branch_section: req.body.branch_section
         })
 
         await newClass.save();

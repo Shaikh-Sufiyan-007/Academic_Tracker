@@ -13,6 +13,14 @@ const classSchema = new mongoose.Schema({
         type: String,
         required: true 
     },
+    branch_code: {
+        type: String,
+        required: true
+    },
+    branch_section: {
+        type: String,
+        required: true
+    },
     attendee: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Teacher"

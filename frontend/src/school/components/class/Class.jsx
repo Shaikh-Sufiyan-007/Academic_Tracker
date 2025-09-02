@@ -7,19 +7,56 @@ import { classSchema } from '../../../yupSchema/classSchema'
 import axios from 'axios'
 import { baseApi } from '../../../environment'
 import { useEffect, useState } from 'react'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import SchoolIcon from "@mui/icons-material/School";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import GroupIcon from "@mui/icons-material/Group";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton'
+import MessageSnackbar from '../../../basic-utility-components/snackbar/MessageSnackbar'
+
 
 const Class = () => {
+  const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState('')
+
+  const handleMessageClose = () => {
+    setMessage('')
+  }
+
   const [classes, setClasses] = useState([])
+  const [edit, setEdit] = useState(false)
+
+  const handleEdit = (id) => {
+    console.log(id)
+    setEdit(true);
+  }
+
+  const cancelEdit = () => {
+    setEdit(false)
+  }
+
+  const handleDelete = (id) => {
+    console.log(id)
+  }
+
   const Formik = useFormik({
-    initialValues: {class_text: "", class_num: ""},
+    initialValues: {class_text: "", class_num: "", branch_code: "", branch_section: ""},
     validationSchema: classSchema,
     onSubmit: (values) => {
       console.log(values)
 
       axios.post(`${baseApi}/class/create`, {...values}).then(res => {
         console.log(res)
+        setMessage(res.data.message)
+        setMessageType('success')
+
       }).catch(e => {
         console.log("Error in creating class", e)
+        setMessage("Error in saving")
+        setMessageType('error')
       })
 
       Formik.resetForm();
@@ -36,10 +73,12 @@ const Class = () => {
 
   useEffect(() => {
     fetchAllClasses();
-  },[])
+  },[message])
 
   return (
     <>
+    {message &&
+        <MessageSnackbar message={message} messageType={messageType} handleClose={handleMessageClose} />}
     <Box
         component="form"
         sx={{
@@ -56,7 +95,10 @@ const Class = () => {
         onSubmit={Formik.handleSubmit}
       >
 
-       <Typography variant="h4" sx={{textAlign: "center", fontWeight: 600}}>Add New Class</Typography>
+        {edit ? <Typography variant="h4" sx={{textAlign: "center", fontWeight: 600}}>Edit Class</Typography>
+          : <Typography variant="h4" sx={{textAlign: "center", fontWeight: 600}}>Add New Class</Typography>
+         }
+       
         <TextField
           name="class_text"
           label="Enter branch name."
@@ -83,19 +125,106 @@ const Class = () => {
           </p>
         )}
 
+        <TextField
+          name="branch_code"
+          label="Enter branch code."
+          value={Formik.values.branch_code}
+          onChange={Formik.handleChange}
+          onBlur={Formik.handleBlur}
+        />
+        {Formik.touched.branch_code && Formik.errors.branch_code && (
+          <p style={{ color: "red", textTransform: "capitalize" }}>
+            {Formik.errors.branch_code}
+          </p>
+        )}
 
+        <TextField
+          name="branch_section"
+          label="Enter branch section."
+          value={Formik.values.branch_section}
+          onChange={Formik.handleChange}
+          onBlur={Formik.handleBlur}
+        />
+        {Formik.touched.branch_section && Formik.errors.branch_section && (
+          <p style={{ color: "red", textTransform: "capitalize" }}>
+            {Formik.errors.branch_section}
+          </p>
+        )}
 
-        <Button type="submit" variant="contained">Submit</Button>
+        <Button type="submit" variant="contained">
+          Submit
+        </Button>
+        {edit && <Button onClick={() => {cancelEdit()}} type="button" variant="contained">
+          Cancel
+        </Button>}
       </Box>
 
-      <Box component={'div'} sx={{display: 'flex', flexWrap: 'wrap',}}>
-        {classes && classes.map((item, index) => {
-          return (
-            <Box key={item._id}>
-              <Typography>Class: {item.class_text} ({item.class_num})</Typography>
-            </Box>
-          )
-        })}
+ 
+      <Box
+        component="div"
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 3,
+          p: 2,
+          justifyContent: "flex-start",
+        }}
+      >
+        {classes &&
+          classes.map((x) => (
+            <Card
+              key={x._id}
+              sx={{
+                width: 280,
+                borderRadius: 3,
+                boxShadow: 4,
+                transition: "transform 0.25s, box-shadow 0.25s",
+                "&:hover": {
+                  transform: "translateY(-6px) scale(1.03)",
+                  boxShadow: 8,
+                },
+              }}
+            >
+              <CardContent>
+                {/* Branch Name */}
+                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  <SchoolIcon color="primary" sx={{ mr: 1 }} />
+                  <Typography variant="h6" fontWeight="bold">
+                    {x.class_text} ({x.branch_code})
+                  </Typography>
+                </Box>
+
+                {/* Year */}
+                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  <CalendarTodayIcon color="secondary" sx={{ mr: 1 }} />
+                  <Typography variant="body1">Year: <b>{x.class_num}</b></Typography>
+                </Box>
+
+                {/* Section */}
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <GroupIcon color="success" sx={{ mr: 1 }} />
+                  <Typography variant="body1">Section: {x.branch_section}</Typography>
+                </Box>
+
+                <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
+                  <IconButton
+                    color="primary"
+                    onClick={() => handleEdit(x._id)}
+                    sx={{ "&:hover": { bgcolor: "rgba(0, 195, 255, 0.34)" } }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    color="error"
+                    onClick={() => handleDelete(x._id)}
+                    sx={{ "&:hover": { bgcolor: "rgba(250, 13, 13, 0.24)" } }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+              </Box>
+              </CardContent>
+            </Card>
+          ))}
       </Box>
       </>
   )
