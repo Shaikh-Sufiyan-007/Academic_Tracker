@@ -28,18 +28,40 @@ const Class = () => {
 
   const [classes, setClasses] = useState([])
   const [edit, setEdit] = useState(false)
+  const [editId, setEditId] = useState(null)
 
-  const handleEdit = (id) => {
+  const handleEdit = (id, class_text, class_num, branch_code, branch_section) => {
     console.log(id)
     setEdit(true);
+    setEditId(id);
+    Formik.setFieldValue("class_text", class_text)
+    Formik.setFieldValue("class_num", class_num)
+    Formik.setFieldValue("class_num", class_num)
+    Formik.setFieldValue("branch_code", branch_code)
+    Formik.setFieldValue("branch_section", branch_section)
   }
 
   const cancelEdit = () => {
     setEdit(false)
+    setEditId(null)
+    Formik.setFieldValue("class_text", "")
+    Formik.setFieldValue("class_num", "")
+    Formik.setFieldValue("class_num", "")
+    Formik.setFieldValue("branch_code", "")
+    Formik.setFieldValue("branch_section", "")
   }
 
   const handleDelete = (id) => {
     console.log(id)
+    axios.delete(`${baseApi}/class/delete/${id}`).then(res => {
+      console.log(res)
+      setMessage(res.data.message)
+      setMessageType('success')
+    }).catch(e => {
+      console.log("Error in deleting class", e)
+      setMessage("Error in deleting")
+      setMessageType('error')
+    })
   }
 
   const Formik = useFormik({
@@ -48,6 +70,17 @@ const Class = () => {
     onSubmit: (values) => {
       console.log(values)
 
+      if(edit) {
+        axios.patch(`${baseApi}/class/update/${editId}`, {...values}).then(res => {
+        setMessage(res.data.message)
+        setMessageType('success')
+        cancelEdit()
+      }).catch(e => {
+        console.log("Error in editing class", e)
+        setMessage("Error in updating")
+        setMessageType('error')
+      })
+      } else {
       axios.post(`${baseApi}/class/create`, {...values}).then(res => {
         console.log(res)
         setMessage(res.data.message)
@@ -58,6 +91,7 @@ const Class = () => {
         setMessage("Error in saving")
         setMessageType('error')
       })
+    }
 
       Formik.resetForm();
     }
@@ -209,7 +243,7 @@ const Class = () => {
                 <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
                   <IconButton
                     color="primary"
-                    onClick={() => handleEdit(x._id)}
+                    onClick={() => handleEdit(x._id, x.class_text, x.class_num, x.branch_code, x.branch_section)}
                     sx={{ "&:hover": { bgcolor: "rgba(0, 195, 255, 0.34)" } }}
                   >
                     <EditIcon />
