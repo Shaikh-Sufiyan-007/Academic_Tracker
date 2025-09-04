@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import schoolRouter from "./routers/school.route.js"
 import classRouter from "./routers/class.route.js"
+import subjectRouter from "./routers/subject.route.js"
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(cookieParser())
 
  app.use('/api/school', schoolRouter)
  app.use('/api/class', classRouter)
+ app.use('/api/subject', subjectRouter)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
