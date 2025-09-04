@@ -13,7 +13,22 @@ const subjectSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-
+    credits: {
+        type: Number,
+        required: true
+    },
+    subject_type: {
+        type: String,
+        required: true
+    },
+    branch_name: {
+        type: String,
+        required: true
+    },
+    branch_code: {
+        type: String,
+        required: true
+    },
     createdAt: {
         type: Date,
         default: new Date()
