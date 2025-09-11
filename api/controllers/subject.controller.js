@@ -25,6 +25,8 @@ export const createSubject = async(req, res) => {
             subject_type: req.body.subject_type,
             branch_name: req.body.branch_name,
             branch_code: req.body.branch_code,
+            year: req.body.year,
+            semester: req.body.semester
         })
         
         await newSubject.save();

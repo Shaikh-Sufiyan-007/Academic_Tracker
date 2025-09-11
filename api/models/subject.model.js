@@ -29,6 +29,14 @@ const subjectSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    year: {
+        type: String,
+        required: true
+    },
+    semester: {
+        type: String,
+        required: true
+    },
     createdAt: {
         type: Date,
         default: new Date()
