@@ -185,10 +185,10 @@ const Class = () => {
           </p>
         )}
 
-        <Button type="submit" variant="contained">
+        <Button sx={{width: '120px'}} type="submit" variant="contained">
           Submit
         </Button>
-        {edit && <Button onClick={() => {cancelEdit()}} type="button" variant="contained">
+        {edit && <Button sx={{width: '120px'}} onClick={() => {cancelEdit()}} type="button" variant="outlined">
           Cancel
         </Button>}
       </Box>

@@ -199,7 +199,7 @@ const Subjects = () => {
         )}
         <TextField
           name="branch_name"
-          label="Enter branch name."
+          label="Enter branch name, Exp: Btech, BCA, MCA"
           value={Formik.values.branch_name}
           onChange={Formik.handleChange}
           onBlur={Formik.handleBlur}
@@ -212,7 +212,7 @@ const Subjects = () => {
 
         <TextField
           name="branch_code"
-          label="Enter branch section."
+          label="Enter branch section, Exp: A, B, C, D"
           value={Formik.values.branch_code}
           onChange={Formik.handleChange}
           onBlur={Formik.handleBlur}
@@ -224,7 +224,7 @@ const Subjects = () => {
         )}
         <TextField
           name="year"
-          label="Enter the year of study."
+          label="Enter the year of study, Exp: 1st, 2nd, 3rd"
           value={Formik.values.year}
           onChange={Formik.handleChange}
           onBlur={Formik.handleBlur}
@@ -248,10 +248,10 @@ const Subjects = () => {
           </p>
         )}
 
-        <Button type="submit" variant="contained">
+        <Button sx={{width: '120px'}} type="submit" variant="contained">
           Submit
         </Button>
-        {edit && <Button onClick={() => {cancelEdit()}} type="button" variant="contained">
+        {edit && <Button sx={{width: '120px'}} onClick={() => {cancelEdit()}} type="button" variant="outlined">
           Cancel
         </Button>}
       </Box>
