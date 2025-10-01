@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import schoolRouter from "./routers/school.route.js"
 import classRouter from "./routers/class.route.js"
 import subjectRouter from "./routers/subject.route.js"
+import studentRouter from "./routers/student.route.js"
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use(cookieParser())
  app.use('/api/school', schoolRouter)
  app.use('/api/class', classRouter)
  app.use('/api/subject', subjectRouter)
+ app.use('/api/student', studentRouter)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

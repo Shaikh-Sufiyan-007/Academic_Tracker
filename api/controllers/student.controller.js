@@ -146,6 +146,23 @@ export const getStudentOwnData = async (req, res) => {
   }
 };
 
+export const getStudentWithId = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const schoolId = req.user.schoolId;
+
+    const student = await Student.findOne({_id: id, school: schoolId}).select(['-password']);
+    if(!student) {
+      return res.status(404).json({ success: false, message: "Student not found." });
+    }
+    res.status(200).json({ success: true, message: "Student data fetched successfully.", student });
+
+  } catch (error) {
+    console.error("Error in getStudentWithId Controller :", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
 export const updateStudent = async(req, res) => {
   try {
     const id = req.user.id;
