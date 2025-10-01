@@ -13,10 +13,6 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    student_class: {
-        type: String,
-        required: true
-    },
     age: {
         type: String,
         required: true
@@ -33,11 +29,27 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    student_phone: {
+        type: String,
+        required: true
+    },
     student_image: {
         type: String,
         required: true
     },
     password: {
+        type: String,
+        required: true
+    },
+    roll_num: {
+        type: Number,
+        required: true
+    },
+    branch: {
+        type: String,
+        required: true
+    },
+    branch_code: {
         type: String,
         required: true
     },
