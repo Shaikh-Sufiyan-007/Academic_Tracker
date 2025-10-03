@@ -44,7 +44,6 @@ export const registerStudent = async (req, res) => {
         student_phone: fields.student_phone,
         roll_num: fields.roll_num,
         branch: fields.branch,
-        branch_code: fields.branch_code,
         year: fields.year,
         student_image: originalFilename,
       });

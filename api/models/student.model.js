@@ -26,11 +26,11 @@ const studentSchema = new mongoose.Schema({
         required: true
     },
     gaurdian_phone: {
-        type: String,
+        type: Number,
         required: true
     },
     student_phone: {
-        type: String,
+        type: Number,
         required: true
     },
     student_image: {
@@ -42,18 +42,13 @@ const studentSchema = new mongoose.Schema({
         required: true
     },
     roll_num: {
-        type: Number,
+        type: String,
         required: true
     },
     branch: {
         type: String,
         required: true
     },
-    branch_code: {
-        type: String,
-        required: true
-    },
-
     createdAt: {
         type: Date,
         default: new Date()

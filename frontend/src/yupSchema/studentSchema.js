@@ -4,7 +4,6 @@ export const studentSchema = yup.object({
     name: yup.string().min(3, 'Student name must contain 3 characters.').required("Student name is required."),
     email: yup.string().email("It must be an Email.").required("Email is required."),
     branch: yup.string().required("Branch is required field."),
-    branch_code: yup.string().required("Branch code is required field."),
     age: yup.string().required("Age is required field."),
     gender: yup.string().required("Gender is required field."),
     gaurdian_phone: yup.string().min(9, "Atleast 9 characters are required").max(11, "Atmost 11 characters are required").required("Gaurdian phone number is required field."),
