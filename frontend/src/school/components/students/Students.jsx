@@ -14,10 +14,31 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { baseApi } from "../../../environment";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Avatar from "@mui/material/Avatar";
+import Chip from "@mui/material/Chip";
+import Grid from "@mui/material/Grid";
+import Divider from "@mui/material/Divider";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+import {
+  Email,
+  Phone,
+  Person,
+  School,
+  Badge,
+  ContactPhone,
+  Lock,
+} from "@mui/icons-material";
+
+import { deepPurple } from "@mui/material/colors";
+import IconButton from "@mui/material/IconButton";
 
 export default function Students() {
   const [file, setFile] = useState(null);
-  const [classes, setClasses] = useState([])
+  const [classes, setClasses] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
   const addImage = (e) => {
     const file = e.target.files[0];
@@ -96,16 +117,51 @@ export default function Students() {
   };
 
   const fetchClasses = () => {
-    axios.get(`${baseApi}/class/all`).then(res => {
-      setClasses(res.data.data)
-    }).catch(e => {
-      console.log("Error in fetching classes", e)
-    })
-  }
+    axios
+      .get(`${baseApi}/class/all`)
+      .then((res) => {
+        setClasses(res.data.data);
+      })
+      .catch((e) => {
+        console.log("Error in fetching classes", e);
+      });
+  };
+
+  const [params, setParams] = useState({});
+  const handleClass = (e) => {
+    setParams((prevParams) => ({
+      ...prevParams,
+      branch: e.target.value || undefined,
+    }));
+  };
+
+  const handleSearch = (e) => {
+    setParams((prevParams) => ({
+      ...prevParams,
+      search: e.target.value || undefined,
+    }));
+  };
+
+  const [students, setStudents] = useState([]);
+  const fetchStudents = () => {
+    axios
+      .get(`${baseApi}/student/all`, { params })
+      .then((res) => {
+        setStudents(res.data.students);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("Error in fetching classes", e);
+      });
+  };
 
   useEffect(() => {
-    fetchClasses()
-  }, [])
+    fetchClasses();
+  }, []);
+
+  useEffect(() => {
+    fetchStudents();
+  }, [message, params]);
 
   return (
     <Box
@@ -114,6 +170,7 @@ export default function Students() {
         height: "80vh",
         paddingTop: "60px",
         paddingBottom: "60px",
+        marginBottom: "500px",
       }}
     >
       {message && (
@@ -181,7 +238,6 @@ export default function Students() {
           </p>
         )}
 
-
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Branch Name</InputLabel>
           <Select
@@ -192,11 +248,15 @@ export default function Students() {
             name="branch"
             onChange={Formik.handleChange}
           >
-            {classes && classes.map((x) => {
-              return (
-                <MenuItem id={x._id} value={x._id}>{x.class_text} ({x.branch_code} for section {x.branch_section})</MenuItem>
-              )
-            })}
+            {classes &&
+              classes.map((x) => {
+                return (
+                  <MenuItem id={x._id} value={x._id}>
+                    {x.class_text} ({x.branch_code} for section{" "}
+                    {x.branch_section})
+                  </MenuItem>
+                );
+              })}
             {/* <MenuItem value={"B.Tech(Bachelor of Technology / Engineering)"}>B.Tech(Bachelor of Technology / Engineering)</MenuItem>
             <MenuItem value={"B.Sc (Bachelor of Science)"}>B.Sc (Bachelor of Science)</MenuItem>
             <MenuItem value={"BBA (Bachelor of Business Administration)"}>BBA (Bachelor of Business Administration)</MenuItem>
@@ -214,7 +274,6 @@ export default function Students() {
             {Formik.errors.branch}
           </p>
         )}
-
 
         <TextField
           name="age"
@@ -333,6 +392,305 @@ export default function Students() {
         <Button type="submit" variant="contained">
           Submit
         </Button>
+      </Box>
+
+      <Box
+        component={"div"}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          marginTop: "40px",
+        }}
+      >
+        <TextField
+          label="Search student name"
+          value={params.search ? params.search : ""}
+          onChange={(e) => {
+            handleSearch(e);
+          }}
+          // onBlur={Formik.handleBlur}
+        />
+        {Formik.touched.gaurdian_phone && Formik.errors.gaurdian_phone && (
+          <p style={{ color: "red", textTransform: "capitalize" }}>
+            {Formik.errors.gaurdian_phone}
+          </p>
+        )}
+
+        <FormControl sx={{ width: "230px", marginLeft: "5px" }}>
+          <InputLabel id="demo-simple-select-label">Branch Name</InputLabel>
+          <Select
+            label="Branch Name"
+            value={params.branch ? params.branch : ""}
+            onChange={(e) => {
+              handleClass(e);
+            }}
+          >
+            <MenuItem value="">Select Branch name</MenuItem>
+            {classes &&
+              classes.map((x) => {
+                return (
+                  <MenuItem id={x._id} value={x._id}>
+                    {x.class_text} ({x.branch_code} for section{" "}
+                    {x.branch_section})
+                  </MenuItem>
+                );
+              })}
+            {/* <MenuItem value={"B.Tech(Bachelor of Technology / Engineering)"}>B.Tech(Bachelor of Technology / Engineering)</MenuItem>
+            <MenuItem value={"B.Sc (Bachelor of Science)"}>B.Sc (Bachelor of Science)</MenuItem>
+            <MenuItem value={"BBA (Bachelor of Business Administration)"}>BBA (Bachelor of Business Administration)</MenuItem>
+            <MenuItem value={"B.Com (Bachelor of Commerce)"}>B.Com (Bachelor of Commerce)</MenuItem>
+            <MenuItem value={"M.Tech (Master of Technology)"}>M.Tech (Master of Technology)</MenuItem>
+            <MenuItem value={"MCA (Master of Computer Applications)"}>MCA (Master of Computer Applications)</MenuItem>
+            <MenuItem value={"MBA (Master of Business Administration)"}>MBA (Master of Business Administration)</MenuItem>
+            <MenuItem value={"M.Sc (Master of Science)"}>M.Sc (Master of Science)</MenuItem>
+            <MenuItem value={"M.Com (Master of Commerce)"}>M.Com (Master of Commerce)</MenuItem>
+            <MenuItem value={"MA (Master of Arts)"}>MA (Master of Arts)</MenuItem> */}
+          </Select>
+        </FormControl>
+      </Box>
+
+      <Box
+        component={"div"}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "start",
+          flexWrap: "wrap",
+          marginTop: "40px",
+          marginBottom: "40px",
+        }}
+      >
+        {students &&
+          students.map((student) => {
+            return (
+              <Card
+                sx={{
+                  maxWidth: 400,
+                  margin: "10px",
+                  marginBottom: "100px",
+                  borderRadius: 3,
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+                  background:
+                    "linear-gradient(135deg, #1e3a8a 0%, #0ea5e9 100%)",
+                  color: "white",
+                  position: "relative",
+                  overflow: "visible",
+                  id: student._id,
+                }}
+              >
+                {/* Header Section */}
+                <Box
+                  sx={{
+                    p: 3,
+                    pb: 1,
+                    background: "rgba(255,255,255,0.1)",
+                    backdropFilter: "blur(10px)",
+                  }}
+                >
+                  <Grid container spacing={2} alignItems="center">
+                    <Grid item>
+                      <Avatar
+                        src={`/images/uploaded/student/${student.student_image}`}
+                        sx={{
+                          width: 80,
+                          height: 80,
+                          border: "3px solid white",
+                          boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+                        }}
+                      >
+                        {student.name.charAt(0)}
+                      </Avatar>
+                    </Grid>
+                    <Grid item xs>
+                      <Typography variant="h5" fontWeight="bold" gutterBottom>
+                        {student.name}
+                      </Typography>
+                      <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                        <Chip
+                          label={`Roll: ${student.roll_num}`}
+                          size="small"
+                          sx={{
+                            backgroundColor: "rgba(255, 255, 255, 0.2)",
+                            color: "white",
+                            fontWeight: "bold",
+                          }}
+                          icon={<Badge sx={{ color: "white" }} />}
+                        />
+                        <Chip
+                          label={student.gender}
+                          size="small"
+                          sx={{
+                            backgroundColor: "rgba(255,255,255,0.2)",
+                            color: "white",
+                          }}
+                          icon={<Person sx={{ color: "white" }} />}
+                        />
+                        <Chip
+                          label={`Age: ${student.age}`}
+                          size="small"
+                          sx={{
+                            backgroundColor: "rgba(255,255,255,0.2)",
+                            color: "white",
+                          }}
+                        />
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Box>
+
+                <CardContent sx={{ p: 3, pt: 2 }}>
+                  {/* Branch Information */}
+                  <Box
+                    sx={{
+                      mb: 3,
+                      p: 2,
+                      borderRadius: 2,
+                      backgroundColor: "rgba(255,255,255,0.1)",
+                      backdropFilter: "blur(5px)",
+                    }}
+                  >
+                    <Grid container spacing={1} alignItems="center">
+                      <Grid item>
+                        <School sx={{ color: "white" }} />
+                      </Grid>
+                      <Grid item xs>
+                        <Typography variant="h6" fontWeight="bold">
+                          {student.branch.class_text} (
+                          {student.branch.branch_code}) of section{" "}
+                          {student.branch.branch_section}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{ mt: 0.5, opacity: 0.9 }}
+                        >
+                          Roll Number: {student.roll_num}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Box>
+
+                  <Divider
+                    sx={{ my: 2, backgroundColor: "rgba(255,255,255,0.3)" }}
+                  />
+
+                  {/* Contact Information */}
+                  <Grid container spacing={2}>
+                    {/* Email */}
+                    <Grid item xs={12}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                      >
+                        <Email sx={{ color: "white" }} />
+                        <Typography variant="body2" noWrap>
+                          {student.email}
+                        </Typography>
+                      </Box>
+                    </Grid>
+
+                    {/* Student Phone Numbers */}
+
+                    <Grid item xs={12} key={student._id}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                      >
+                        <Phone sx={{ color: "white" }} />
+                        <Typography variant="body2">
+                          {student.student_phone}
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  </Grid>
+
+                  <Divider
+                    sx={{ my: 2, backgroundColor: "rgba(255,255,255,0.3)" }}
+                  />
+
+                  {/* Guardian Information */}
+                  <Box
+                    sx={{
+                      p: 2,
+                      borderRadius: 2,
+                      backgroundColor: "rgba(255,255,255,0.1)",
+                      backdropFilter: "blur(5px)",
+                    }}
+                  >
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      gutterBottom
+                    >
+                      Guardian Information
+                    </Typography>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                        >
+                          <Person sx={{ color: "white" }} />
+                          <Typography variant="body2">
+                            {student.gaurdian}
+                          </Typography>
+                        </Box>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                        >
+                          <ContactPhone sx={{ color: "white" }} />
+                          <Typography variant="body2">
+                            {student.gaurdian_phone}
+                          </Typography>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </CardContent>
+
+                {/* Decorative Elements */}
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    width: 100,
+                    height: 100,
+                    background:
+                      "radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)",
+                    borderRadius: "0 0 0 100%",
+                  }}
+                />
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: 80,
+                    height: 80,
+                    background:
+                      "radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)",
+                    borderRadius: "0 100% 0 0",
+                  }}
+                />
+
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}
+                >
+                  <IconButton
+                    sx={{ "&:hover": { bgcolor: "rgba(0, 195, 255, 0.34)" }, color: "rgba(198, 216, 96, 0.64)" }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    color="error"
+                    sx={{ "&:hover": { bgcolor: "rgba(250, 13, 13, 0.24)" } }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              </Card>
+            );
+          })}
       </Box>
     </Box>
   );

@@ -29,26 +29,11 @@ const studentSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    student_phone: {
-        type: Number,
-        required: true
-    },
-    student_image: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    roll_num: {
-        type: String,
-        required: true
-    },
-    branch: {
-        type: String,
-        required: true
-    },
+    student_phone: {type: Number, required: true},
+    student_image: {type: String,required: true},
+    password: {type: String,required: true},
+    roll_num: {type: String,required: true },
+    branch: {type: mongoose.Schema.Types.ObjectId,ref: "Class"},
     createdAt: {
         type: Date,
         default: new Date()

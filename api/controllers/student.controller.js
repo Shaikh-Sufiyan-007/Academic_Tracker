@@ -1,5 +1,6 @@
 import formidable from "formidable";
 import Student from "../models/student.model.js";
+import Class from "../models/class.model.js";
 import path from "path";
 import dotenv from "dotenv";
 dotenv.config();
@@ -112,15 +113,15 @@ export const getStudentsWithQuery = async (req, res) => {
     const schoolId = req.user.schoolId;
     filterQuery['school'] = schoolId;
 
-    if(req.query.hasOwnProperty('search')) {
+    if(req.query.search) {
       filterQuery['name'] = { $regex: req.query.search, $options: "i" };
     }
 
-    if(req.query.hasOwnProperty('branch')) {
+    if(req.query.branch) {
       filterQuery['branch'] = req.query.branch;
     }
 
-    const students = await Student.find(filterQuery).select(['-password']);
+    const students = await Student.find(filterQuery).populate('branch').select(['-password']);
     res.status(200).json({ success: true, message: "Students fetched successfully.", students });
   } catch (error) {
     console.error("Error in getAllStudents Controller :", error);
@@ -132,7 +133,7 @@ export const getStudentOwnData = async (req, res) => {
   try {
     const id = req.user.id;
     const schoolId = req.user.schoolId;
-    const student = await Student.findById({_id: id, school: schoolId}).select(['-password'])
+    const student = await Student.findById({_id: id, school: schoolId}).populate('branch').select(['-password'])
     if(!student) {
       return res.status(404).json({ success: false, message: "Student not found." });
     }
