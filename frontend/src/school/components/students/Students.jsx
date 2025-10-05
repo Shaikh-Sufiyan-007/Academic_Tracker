@@ -7,7 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import { useRef } from "react";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { studentSchema } from "../../../yupSchema/studentSchema";
+import { studentEditSchema, studentSchema } from "../../../yupSchema/studentSchema";
 import MessageSnackbar from "../../../basic-utility-components/snackbar/MessageSnackbar";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -33,11 +33,12 @@ import {
   Lock,
 } from "@mui/icons-material";
 
-import { deepPurple } from "@mui/material/colors";
 import IconButton from "@mui/material/IconButton";
 
 export default function Students() {
   const [file, setFile] = useState(null);
+  const [edit, setEdit] = useState(false)
+  const [editId, setEditId] = useState(null)
   const [classes, setClasses] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
   const addImage = (e) => {
@@ -55,6 +56,32 @@ export default function Students() {
     setImageUrl(null);
   };
 
+  const cancelEdit = () => {
+    setEdit(false)
+    setEditId(null)
+    Formik.resetForm();
+  }
+
+  const handleEdit = (id) => {
+    setEdit(true)
+    setEditId(id)
+    const filteredStudent = students.filter((student) => student._id === id)
+    console.log(filteredStudent)
+    Formik.setFieldValue('email', filteredStudent[0].email)
+    Formik.setFieldValue('name', filteredStudent[0].name)
+    Formik.setFieldValue('branch', filteredStudent[0].branch._id)
+    Formik.setFieldValue('age', filteredStudent[0].age)
+    Formik.setFieldValue('gender', filteredStudent[0].gender)
+    Formik.setFieldValue('gaurdian_phone', filteredStudent[0].gaurdian_phone)
+    Formik.setFieldValue('student_phone', filteredStudent[0].student_phone)
+    Formik.setFieldValue('roll_num', filteredStudent[0].roll_num)
+    Formik.setFieldValue('gaurdian', filteredStudent[0].gaurdian)
+  }
+
+  const handleDelete = (id) => {
+    
+  }
+
   const initialValues = {
     name: "",
     email: "",
@@ -70,10 +97,46 @@ export default function Students() {
   };
   const Formik = useFormik({
     initialValues,
-    validationSchema: studentSchema,
+    validationSchema: edit ? studentEditSchema :studentSchema,
     onSubmit: (values) => {
       console.log("Register submit values: ", values);
 
+      if(edit) {
+        const formData = new FormData()
+        
+        formData.append("name", values.name);
+        formData.append("email", values.email);
+        formData.append("branch", values.branch);
+        formData.append("age", values.age);
+        formData.append("gender", values.gender);
+        formData.append("gaurdian_phone", values.gaurdian_phone);
+        formData.append("student_phone", values.student_phone);
+        formData.append("roll_num", values.roll_num);
+        formData.append("gaurdian", values.gaurdian);
+
+        if(file) {
+          formData.append("image", file, file.name);
+        }
+        if(values.password) {
+          formData.append("password", values.password);
+        }
+
+        axios
+        .patch(`http://localhost:5000/api/student/update/${editId}`, formData)
+        .then((res) => {
+          console.log(res);
+          setMessage(res.data.message);
+          setMessageType("success");
+          Formik.resetForm();
+          handleClearFile();
+        })
+        .catch((e) => {
+          setMessage("Error in updating student.");
+          setMessageType("error");
+          console.log("Error in register: ", e);
+        });
+
+      } else {
       if (file) {
         const formData = new FormData();
         formData.append("image", file, file.name);
@@ -106,6 +169,7 @@ export default function Students() {
         setMessage("Please Add School/College Image.");
         setMessageType("error");
       }
+    }
     },
   });
 
@@ -196,11 +260,11 @@ export default function Students() {
         autoComplete="off"
         onSubmit={Formik.handleSubmit}
       >
-        <Typography variant="h2" sx={{ textAlign: "center" }}>
-          Students
-        </Typography>
+        {edit ? <Typography variant="h4" sx={{ textAlign: "center" }}>Edit Student</Typography>
+        :<Typography variant="h4" sx={{ textAlign: "center" }}>Add New Student</Typography>
+        }
 
-        <Typography>Add College Picture</Typography>
+        <Typography>Add Student Picture</Typography>
         <TextField
           inputRef={fileInputRef}
           type="file"
@@ -251,7 +315,7 @@ export default function Students() {
             {classes &&
               classes.map((x) => {
                 return (
-                  <MenuItem id={x._id} value={x._id}>
+                  <MenuItem key={x._id} value={x._id}>
                     {x.class_text} ({x.branch_code} for section{" "}
                     {x.branch_section})
                   </MenuItem>
@@ -389,9 +453,12 @@ export default function Students() {
           </p>
         )}
 
-        <Button type="submit" variant="contained">
+        <Button sx={{width: '120px'}} type="submit" variant="contained">
           Submit
         </Button>
+        {edit && <Button color="error" sx={{width: '120px'}} onClick={() => {cancelEdit()}} type="button" variant="outlined">
+                  Cancel
+        </Button>}
       </Box>
 
       <Box
@@ -430,7 +497,7 @@ export default function Students() {
             {classes &&
               classes.map((x) => {
                 return (
-                  <MenuItem id={x._id} value={x._id}>
+                  <MenuItem key={x._id} value={x._id}>
                     {x.class_text} ({x.branch_code} for section{" "}
                     {x.branch_section})
                   </MenuItem>
@@ -476,8 +543,8 @@ export default function Students() {
                   color: "white",
                   position: "relative",
                   overflow: "visible",
-                  id: student._id,
                 }}
+                key={student._id}
               >
                 {/* Header Section */}
                 <Box
@@ -677,6 +744,7 @@ export default function Students() {
                   sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}
                 >
                   <IconButton
+                    onClick={() => {handleEdit(student._id)}}
                     sx={{ "&:hover": { bgcolor: "rgba(0, 195, 255, 0.34)" }, color: "rgba(198, 216, 96, 0.64)" }}
                   >
                     <EditIcon />
@@ -684,6 +752,7 @@ export default function Students() {
                   <IconButton
                     color="error"
                     sx={{ "&:hover": { bgcolor: "rgba(250, 13, 13, 0.24)" } }}
+                    onClick={() => {handleDelete(student._id)}}
                   >
                     <DeleteIcon />
                   </IconButton>
