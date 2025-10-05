@@ -10,6 +10,6 @@ router.post('/login', loginStudent)
 router.patch('/update/:id', authMiddleware(['SCHOOL']), updateStudent) // AUTHENTICATED USER FOR UPDATE
 router.get('/fetch-single', authMiddleware(['STUDENT']), getStudentOwnData)
 router.get('/fetch/:id', authMiddleware(['STUDENT']), getStudentWithId)
-router.delete('/delete/:id', authMiddleware(['STUDENT']), deleteStudentWithId)
+router.delete('/delete/:id', authMiddleware(['SCHOOL']), deleteStudentWithId)
 
 export default router

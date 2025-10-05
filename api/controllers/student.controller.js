@@ -245,7 +245,6 @@ export const updateStudent = async (req, res) => {
         }
 
       } else {
-        console.log(fields)
         Object.keys(fields).forEach((field) => {
           student[field] = fields[field];
         });

@@ -79,7 +79,20 @@ export default function Students() {
   }
 
   const handleDelete = (id) => {
-    
+    if(confirm("Are you sure you want to delete this student?")) {
+      axios
+         .delete(`http://localhost:5000/api/student/delete/${id}`)
+         .then((res) => {
+           console.log(res);
+           setMessage(res.data.message);
+           setMessageType("success");
+         })
+         .catch((e) => {
+           setMessage("Error in deleting student.");
+           setMessageType("error");
+           console.log("Error in register: ", e);
+         });
+    }
   }
 
   const initialValues = {
