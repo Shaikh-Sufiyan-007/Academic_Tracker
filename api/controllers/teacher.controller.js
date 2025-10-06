@@ -8,18 +8,19 @@ import fs from "fs";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { fileURLToPath } from "url";
+import Teacher from "../models/teacher.model.js";
 
 // AUTHENTICATION - Student, STUDENT AND TEACHER
 
-export const registerStudent = async (req, res) => {
+export const registerTeacher = async (req, res) => {
   try {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
-      const student = await Student.findOne({ email: fields.email });
-      if (student) {
+      const teacher = await Teacher.findOne({ email: fields.email });
+      if (teacher) {
         return res
           .status(409)
-          .json({ success: false, message: "Student already exists." });
+          .json({ success: false, message: "teacher already exists." });
       }
 
       const photo = files.image;
@@ -29,61 +30,55 @@ export const registerStudent = async (req, res) => {
       const __dirname = path.dirname(__filename);
       let newPath = path.join(
         __dirname,
-        process.env.STUDENT_IMAGE_PATH,
+        process.env.TEACHER_IMAGE_PATH,
         originalFilename
       );
 
       let photoData = fs.readFileSync(filepath);
       fs.writeFileSync(newPath, photoData);
 
-      const salt = await bcrypt.genSaltSync(10);
-      const hashPassword = await bcrypt.hash(fields.password, salt);
-      const newStudent = new Student({
+      const salt = bcrypt.genSaltSync(10);
+      const hashPassword = bcrypt.hash(fields.password, salt);
+      const newTeacher = new Teacher({
         school: req.user.schoolId,
         name: fields.name,
         email: fields.email,
         password: hashPassword,
         age: fields.age,
         gender: fields.gender,
-        gaurdian: fields.gaurdian,
-        gaurdian_phone: fields.gaurdian_phone,
-        student_phone: fields.student_phone,
-        student_phone: fields.student_phone,
-        roll_num: fields.roll_num,
-        branch: fields.branch,
-        year: fields.year,
-        student_image: originalFilename,
+        qualification: fields.qualification,
+        teacher_image: originalFilename,
       });
 
-      const savedStudent = await newStudent.save();
+      const savedTeacher = await newTeacher.save();
       res.status(201).json({
         success: true,
-        data: savedStudent,
-        message: "Student registered successfully.",
+        data: savedTeacher,
+        message: "teacher registered successfully.",
       });
     });
   } catch (error) {
-    console.error("Error in registerStudent Controller :", error);
+    console.error("Error in registerTeacher Controller :", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export const loginStudent = async (req, res) => {
+export const loginTeacher = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const student = await Student.findOne({ email });
-    if (student) {
-      const isAuth = bcrypt.compareSync(password, student.password);
+    const teacher = await Teacher.findOne({ email });
+    if (teacher) {
+      const isAuth = bcrypt.compareSync(password, teacher.password);
       if (isAuth) {
         const jwtSecret = process.env.JWT_SECRET;
         const token = jwt.sign(
           {
-            id: student._id,
-            schoolId: student.school,
-            name: student.student_name,
-            image_url: student.student_image,
-            role: "STUDENT",
+            id: teacher._id,
+            schoolId: teacher.school,
+            name: teacher.teacher_name,
+            image_url: teacher.teacher_image,
+            role: "TEACHER",
           },
           jwtSecret
         );
@@ -92,13 +87,14 @@ export const loginStudent = async (req, res) => {
 
         res.status(200).json({
           success: true,
-          message: "Student logged in successfully.",
+          message: "teacher logged in successfully.",
           user: {
-            id: student._id,
-            schoolId: student.school,
-            name: student.student_name,
-            image_url: student.student_image,
-            role: "STUDENT",
+            id: teacher._id,
+            schoolId: teacher.school,
+            owner_name: teacher.owner_name,
+            name: teacher.teacher_name,
+            image_url: teacher.teacher_image,
+            role: "TEACHER",
           },
         });
       } else {
@@ -107,15 +103,15 @@ export const loginStudent = async (req, res) => {
           .json({ success: false, message: "Invalid credentials." });
       }
     } else {
-      res.status(404).json({ success: false, message: "Student not found." });
+      res.status(404).json({ success: false, message: "teacher not found." });
     }
   } catch (error) {
-    console.error("Error in loginStudent Controller :", error);
+    console.error("Error in loginTeacher Controller :", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export const getStudentsWithQuery = async (req, res) => {
+export const getTeachersWithQuery = async (req, res) => {
   try {
     const filterQuery = {};
     const schoolId = req.user.schoolId;
@@ -125,84 +121,79 @@ export const getStudentsWithQuery = async (req, res) => {
       filterQuery["name"] = { $regex: req.query.search, $options: "i" };
     }
 
-    if (req.query.branch) {
-      filterQuery["branch"] = req.query.branch;
-    }
-
-    const students = await Student.find(filterQuery)
-      .populate("branch")
+    const teachers = await Teacher.find(filterQuery)
       .select(["-password"]);
     res
       .status(200)
       .json({
         success: true,
-        message: "Students fetched successfully.",
-        students,
+        message: "teachers fetched successfully.",
+        teachers,
       });
   } catch (error) {
-    console.error("Error in getAllStudents Controller :", error);
+    console.error("Error in getAllteachers Controller :", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export const getStudentOwnData = async (req, res) => {
+export const getTeacherOwnData = async (req, res) => {
   try {
     const id = req.user.id;
     const schoolId = req.user.schoolId;
-    const student = await Student.findById({ _id: id, school: schoolId })
+    const teacher = await Teacher.findById({ _id: id, school: schoolId })
       .select(["-password"]);
-    if (!student) {
+    if (!teacher) {
       return res
         .status(404)
-        .json({ success: false, message: "Student not found." });
+        .json({ success: false, message: "teacher not found." });
     }
 
     res
       .status(200)
       .json({
         success: true,
-        message: "Student data fetched successfully.",
-        student,
+        message: "teacher data fetched successfully.",
+        teacher,
       });
   } catch (error) {
-    console.error("Error in getStudentOwnData Controller :", error);
+    console.error("Error in getTeacherOwnData Controller :", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export const getStudentWithId = async (req, res) => {
+export const getTeacherWithId = async (req, res) => {
   try {
     const id = req.params.id;
     const schoolId = req.user.schoolId;
 
-    const student = await Student.findOne({ _id: id, school: schoolId }).select(
+    const teacher = await Teacher.findOne({ _id: id, school: schoolId }).select(
       ["-password"]
     );
-    if (!student) {
+    if (!teacher) {
       return res
         .status(404)
-        .json({ success: false, message: "Student not found." });
+        .json({ success: false, message: "teacher not found." });
     }
     res
       .status(200)
       .json({
         success: true,
-        message: "Student data fetched successfully.",
-        student,
+        message: "teacher data fetched successfully.",
+        teacher,
       });
   } catch (error) {
-    console.error("Error in getStudentWithId Controller :", error);
+    console.error("Error in getTeacherWithId Controller :", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export const updateStudent = async (req, res) => {
+export const updateTeacher = async (req, res) => {
   try {
     const id = req.params.id;
     const schoolId = req.user.schoolId;
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
-      const student = await Student.findOne({ _id: id, school: schoolId });
+      const teacher = await Teacher.findOne({ _id: id, school: schoolId });
       if (files.image) {
         const photo = files.image;
         let filepath = photo.filepath;
@@ -210,11 +201,11 @@ export const updateStudent = async (req, res) => {
 
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
-        if (student.student_image) {
+        if (teacher.teacher_image) {
           let oldImagePath = path.join(
             __dirname,
-            process.env.STUDENT_IMAGE_PATH,
-            student.student_image
+            process.env.TEACHER_IMAGE_PATH,
+            teacher.teacher_image
           );
           if (fs.existsSync(oldImagePath)) {
             fs.unlink(oldImagePath, (err) => {
@@ -225,59 +216,59 @@ export const updateStudent = async (req, res) => {
 
         let newPath = path.join(
           __dirname,
-          process.env.STUDENT_IMAGE_PATH,
+          process.env.TEACHER_IMAGE_PATH,
           originalFilename
         );
         let photoData = fs.readFileSync(filepath);
         fs.writeFileSync(newPath, photoData);
 
         Object.keys(fields).forEach((field) => {
-          student[field] = fields[field];
+          teacher[field] = fields[field];
         });
-        student["student_image"] = originalFilename;
+        teacher["teacher_image"] = originalFilename;
 
         if (fields.password) {
-          const salt = await bcrypt.genSaltSync(10);
-          const hashPassword = await bcrypt.hash(fields.password, salt);
-          student["password"] = hashPassword;
+          const salt = bcrypt.genSaltSync(10);
+          const hashPassword = bcrypt.hash(fields.password, salt);
+          teacher["password"] = hashPassword;
         }
 
       } else {
         Object.keys(fields).forEach((field) => {
-          student[field] = fields[field];
+          teacher[field] = fields[field];
         });
       }
 
-      await student.save();
+      await teacher.save();
       res
         .status(200)
         .json({
           success: true,
-          message: "Student updated successfully.",
-          student,
+          message: "teacher updated successfully.",
+          teacher,
         });
     });
   } catch (error) {
-    console.error("Error in registerStudent Controller :", error);
+    console.error("Error in registerTeacher Controller :", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export const deleteStudentWithId = async (req, res) => {
+export const deleteTeacherWithId = async (req, res) => {
   try {
     const id = req.params.id;
     const schoolId = req.user.schoolId;
-    await Student.findOneAndDelete({ _id: id, school: schoolId });
-    const students = await Student.find({ school: schoolId });
+    await Teacher.findOneAndDelete({ _id: id, school: schoolId });
+    const teachers = await Teacher.find({ school: schoolId });
     res
       .status(200)
       .json({
         success: true,
-        message: "Student deleted successfully.",
-        students,
+        message: "teacher deleted successfully.",
+        teachers,
       });
   } catch (error) {
-    console.error("Error in deleteStudentWithId Controller :", error);
+    console.error("Error in deleteTeacherWithId Controller :", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
