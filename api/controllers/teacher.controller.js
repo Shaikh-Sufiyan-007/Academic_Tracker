@@ -28,6 +28,7 @@ export const registerTeacher = async (req, res) => {
       let originalFilename = photo.originalFilename.replace(" ", "_");
       const __filename = fileURLToPath(import.meta.url);
       const __dirname = path.dirname(__filename);
+
       let newPath = path.join(
         __dirname,
         process.env.TEACHER_IMAGE_PATH,
@@ -37,8 +38,8 @@ export const registerTeacher = async (req, res) => {
       let photoData = fs.readFileSync(filepath);
       fs.writeFileSync(newPath, photoData);
 
-      const salt = bcrypt.genSaltSync(10);
-      const hashPassword = bcrypt.hash(fields.password, salt);
+      const salt = await bcrypt.genSaltSync(10);
+      const hashPassword = await bcrypt.hash(fields.password, salt);
       const newTeacher = new Teacher({
         school: req.user.schoolId,
         name: fields.name,
@@ -228,8 +229,8 @@ export const updateTeacher = async (req, res) => {
         teacher["teacher_image"] = originalFilename;
 
         if (fields.password) {
-          const salt = bcrypt.genSaltSync(10);
-          const hashPassword = bcrypt.hash(fields.password, salt);
+          const salt = await bcrypt.genSaltSync(10);
+          const hashPassword = await bcrypt.hash(fields.password, salt);
           teacher["password"] = hashPassword;
         }
 
