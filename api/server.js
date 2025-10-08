@@ -8,6 +8,7 @@ import classRouter from "./routers/class.route.js"
 import subjectRouter from "./routers/subject.route.js"
 import studentRouter from "./routers/student.route.js"
 import teacherRouter from "./routers/teacher.route.js"
+import scheduleRouter from "./routers/schedule.route.js"
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use(cookieParser())
  app.use('/api/subject', subjectRouter)
  app.use('/api/student', studentRouter)
  app.use('/api/teacher', teacherRouter)
+ app.use('/api/schedule', scheduleRouter)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

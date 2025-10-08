@@ -1,6 +1,4 @@
-import Subject from "../models/subject.model.js";
-import Student from "../models/student.model.js";
-import Exam from "../models/examination.model.js";
+
 import Schedule from "../models/schedule.model.js";
 
 export const getScheduleWithClass = async(req, res) => {
