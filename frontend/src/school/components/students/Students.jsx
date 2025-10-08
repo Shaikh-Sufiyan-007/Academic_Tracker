@@ -334,16 +334,7 @@ export default function Students() {
                   </MenuItem>
                 );
               })}
-            {/* <MenuItem value={"B.Tech(Bachelor of Technology / Engineering)"}>B.Tech(Bachelor of Technology / Engineering)</MenuItem>
-            <MenuItem value={"B.Sc (Bachelor of Science)"}>B.Sc (Bachelor of Science)</MenuItem>
-            <MenuItem value={"BBA (Bachelor of Business Administration)"}>BBA (Bachelor of Business Administration)</MenuItem>
-            <MenuItem value={"B.Com (Bachelor of Commerce)"}>B.Com (Bachelor of Commerce)</MenuItem>
-            <MenuItem value={"M.Tech (Master of Technology)"}>M.Tech (Master of Technology)</MenuItem>
-            <MenuItem value={"MCA (Master of Computer Applications)"}>MCA (Master of Computer Applications)</MenuItem>
-            <MenuItem value={"MBA (Master of Business Administration)"}>MBA (Master of Business Administration)</MenuItem>
-            <MenuItem value={"M.Sc (Master of Science)"}>M.Sc (Master of Science)</MenuItem>
-            <MenuItem value={"M.Com (Master of Commerce)"}>M.Com (Master of Commerce)</MenuItem>
-            <MenuItem value={"MA (Master of Arts)"}>MA (Master of Arts)</MenuItem> */}
+
           </Select>
         </FormControl>
         {Formik.touched.branch && Formik.errors.branch && (

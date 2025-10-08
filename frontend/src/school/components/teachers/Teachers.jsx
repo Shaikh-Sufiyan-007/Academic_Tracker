@@ -7,7 +7,6 @@ import CardMedia from "@mui/material/CardMedia";
 import { useRef } from "react";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { studentEditSchema, studentSchema } from "../../../yupSchema/studentSchema";
 import MessageSnackbar from "../../../basic-utility-components/snackbar/MessageSnackbar";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -97,6 +96,7 @@ export default function Teacher() {
     email: "",
     age: "",
     qualification: "",
+    gender: "",
     gaurdian: "",
     password: "",
     confirm_password: "",
@@ -190,12 +190,7 @@ export default function Teacher() {
   };
 
   const [params, setParams] = useState({});
-  const handleClass = (e) => {
-    setParams((prevParams) => ({
-      ...prevParams,
-      branch: e.target.value || undefined,
-    }));
-  };
+  
 
   const handleSearch = (e) => {
     setParams((prevParams) => ({
@@ -410,27 +405,6 @@ export default function Teacher() {
           </p>
         )}
 
-        <FormControl sx={{ width: "230px", marginLeft: "5px" }}>
-          <InputLabel id="demo-simple-select-label">Branch Name</InputLabel>
-          <Select
-            label="Branch Name"
-            value={params.branch ? params.branch : ""}
-            onChange={(e) => {
-              handleClass(e);
-            }}
-          >
-            <MenuItem value="">Select Branch name</MenuItem>
-            {classes &&
-              classes.map((x) => {
-                return (
-                  <MenuItem key={x._id} value={x._id}>
-                    {x.class_text} ({x.branch_code} for section{" "}
-                    {x.branch_section})
-                  </MenuItem>
-                );
-              })}
-          </Select>
-        </FormControl>
       </Box>
 
       <Box
@@ -472,7 +446,7 @@ export default function Teacher() {
                   }}
                 >
                   <Grid container spacing={2} alignItems="center">
-                    <Grid item>
+                    <Grid>
                       <Avatar
                         src={`/images/uploaded/teacher/${teacher.teacher_image}`}
                         sx={{
