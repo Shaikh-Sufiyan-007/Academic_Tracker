@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
-import { Formik, useFormik } from "formik";
+import { Form, Formik, useFormik } from "formik";
 import { periodSchema } from "../../../yupSchema/periodSchema";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -17,12 +17,31 @@ import Button from "@mui/material/Button";
 import dayjs from "dayjs";
 import Typography from "@mui/material/Typography";
 
-const ScheduleEvent = ({ selectedClass }) => {
+const ScheduleEvent = ({ selectedClass, handleEventClose, handleNewMessage, edit, selectedEventId }) => {
   const periods = [
-    { id: 1, label: "Period 1", startTime: "10:00", endTime: "11:00" },
-    { id: 2, label: "Period 2", startTime: "11:00", endTime: "12:00" },
-    { id: 3, label: "Period 3", startTime: "13:00", endTime: "14:00" },
+    { id: 1, label: "Period 1 (10: 00 AM - 11: 00 AM)", startTime: "10:00", endTime: "11:00" },
+    { id: 2, label: "Period 2 (11: 00 AM - 12: 00 AM)", startTime: "11:00", endTime: "12:00" },
+    { id: 3, label: "Period 3 (12: 00 AM - 1: 00 PM)", startTime: "12:00", endTime: "13:00" },
+    { id: 4, label: "Lunch Break (1: 00 AM - 2: 00 PM)", startTime: "13:00", endTime: "14:00" },
+    { id: 5, label: "Period 4 (2: 00 PM - 3: 00 PM)", startTime: "14:00", endTime: "15:00" },
+    { id: 6, label: "Period 5 (3: 00 PM - 4: 00 PM)", startTime: "15:00", endTime: "16:00" },
   ];
+
+  const handleDelete = () => {
+    if(confirm("Are you sure you want to delete this schedule?")) {
+      axios.delete(`${baseApi}/schedule/delete/${selectedEventId}`).then(res => {
+        handleNewMessage(res.data.message, "success")
+        handleCancel()
+      }).catch(e => {
+        handleNewMessage("Error in deleting", "error")
+      })
+    }
+  }
+  const handleCancel = () => {
+    Formik.resetForm();
+    handleEventClose()
+  }
+
 
   const [teachers, setTeachers] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -41,20 +60,14 @@ const ScheduleEvent = ({ selectedClass }) => {
       let date = values.date.toDate();
       let startTime = values.period.split(",")[0];
       let endTime = values.period.split(",")[1];
+      let BACKEND_URL = `${baseApi}/schedule/create`;
 
-      console.log({
-        ...values,
-          selectedClass,
-          startTime: new Date(
-            date.setHours(startTime.split(":")[0], startTime.split(":")[1])
-          ),
-          endTime: new Date(
-            date.setHours(endTime.split(":")[0], endTime.split(":")[1])
-          ),
-        }
-      )
+      if(edit) {
+        BACKEND_URL = `${baseApi}/schedule/update/${selectedEventId}`
+      } 
+
       axios
-        .post(`${baseApi}/schedule/create`, {
+        .post(BACKEND_URL, {
           ...values,
           selectedClass,
           startTime: new Date(
@@ -65,10 +78,15 @@ const ScheduleEvent = ({ selectedClass }) => {
           ),
         })
         .then((res) => {
-          console.log("res", res);
+          // setMessage(res.data.message);
+          // setMessageType("success");
+          handleNewMessage(res.data.message, "success");
+          Formik.resetForm();
+          handleEventClose();
         })
         .catch((e) => {
           console.log("Error in creating schedule", e);
+          handleNewMessage("Error in creating new schedule", "error");
         });
     },
   });
@@ -88,11 +106,31 @@ const ScheduleEvent = ({ selectedClass }) => {
     fetchData();
   }, []);
 
+  const dateFormate = (date) => {
+    const jsDate = date instanceof Date ? date : date.toDate();
+    const dateHours = jsDate.getHours()
+    const dateMinutes = jsDate.getMinutes()
+    return `${dateHours}:${dateMinutes < 10 ? '0' : ''}${dateMinutes}`
+  }
+
+  useEffect(() => {
+    if(selectedEventId) {
+      axios.get(`${baseApi}/schedule/fetch/${selectedEventId}`, {}).then(res => {
+        let start = dayjs(res.data.data.startTime);
+        let end = dayjs(res.data.data.endTime);
+        Formik.setFieldValue("teacher", res.data.data.teacher);
+        Formik.setFieldValue("subject", res.data.data.subject);
+        Formik.setFieldValue("date", start);
+        const finalFormattedTime = dateFormate(start)+','+dateFormate(end)
+        Formik.setFieldValue("period", `${finalFormattedTime}`);
+      }).catch(e => {
+        console.log("Error in editing schedule", e);
+      })
+    }
+  },[selectedEventId])
+
   return (
     <>
-      <Typography variant="h4" sx={{ textAlign: "center" }}>
-        Add new period
-      </Typography>
       <Box
         component="form"
         sx={{
@@ -108,6 +146,15 @@ const ScheduleEvent = ({ selectedClass }) => {
         autoComplete="off"
         onSubmit={Formik.handleSubmit}
       >
+
+        {edit ? <Typography variant="h4" sx={{ textAlign: "center" }}>
+          Edit period
+        </Typography> : 
+        <Typography variant="h4" sx={{ textAlign: "center" }}>
+          Add new period
+        </Typography>
+        }
+        
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Teachers</InputLabel>
           <Select
@@ -161,7 +208,7 @@ const ScheduleEvent = ({ selectedClass }) => {
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Periods</InputLabel>
           <Select
-            value={Formik.values.branch}
+            value={Formik.values.period}
             label="Branch Name"
             name="period"
             onChange={Formik.handleChange}
@@ -187,7 +234,7 @@ const ScheduleEvent = ({ selectedClass }) => {
           <DemoContainer components={["DatePicker"]}>
             <DatePicker
               label="Basic date picker"
-              value={dayjs(Formik.values.date)}
+              value={Formik.values.date ? dayjs(Formik.values.date) : null}
               onChange={(newValue) => Formik.setFieldValue("date", newValue)}
             />
           </DemoContainer>
@@ -195,6 +242,12 @@ const ScheduleEvent = ({ selectedClass }) => {
 
         <Button type="submit" variant="contained">
           Submit
+        </Button>
+        <Button type="button" variant="contained" onClick={handleDelete} color="error">
+          Delete
+        </Button>
+        <Button type="button" onClick={handleCancel} variant="outlined">
+          Cancel
         </Button>
       </Box>
     </>

@@ -14,11 +14,11 @@ import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import enUS from "date-fns/locale/en-US";
 import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
 import { baseApi } from "../../../environment";
+import MessageSnackbar from "../../../basic-utility-components/snackbar/MessageSnackbar";
 
 const locales = {
   "en-US": enUS,
@@ -33,6 +33,18 @@ const localizer = dateFnsLocalizer({
 });
 
 const Schedule = () => {
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+
+  const handleMessageClose = () => {
+    setMessage("");
+  };
+
+  const handleNewMessage = (msg, type) => {
+    setMessage(msg)
+    setMessageType(type)
+  }
+
   const [classes, setClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
 
@@ -53,6 +65,22 @@ const Schedule = () => {
     },
   ];
 
+  const [events, setEvents] = useState(myEventsList)
+
+
+  const HandleEventClose = () => {
+    setNewPeriod(false);
+    setEdit(false)
+    setSelectedEventId(null)
+  };
+  const [edit, setEdit] = useState(false)
+  const [selectedEventId, setSelectedEventId] = useState(null)
+  const handleSelectEvent = (event) => {
+    setEdit(true)
+    setSelectedEventId(event.id)
+    console.log(event)
+  }
+
   useEffect(() => {
     axios
       .get(`${baseApi}/class/all`)
@@ -64,11 +92,38 @@ const Schedule = () => {
         console.log("Error in fetching classes", e);
       });
   }, []);
+
+  useEffect(() => {
+    if(selectedClass) {
+
+      axios.get(`${baseApi}/schedule/fetch-with-class/${selectedClass}`).then(res => {
+        const respData = res.data.data.map(x => {
+          return ({
+            id: x._id,
+            title: `Sub: ${x.subject.subject_name} (${x.subject.subject_code}), Teacher: ${x.teacher.name}`,
+            start: new Date(x.startTime),
+            end: new Date(x.endTime)
+          })
+        })
+        setEvents(respData)
+      }).catch(e => {
+        console.log("Error in fetching schedule", e)
+      })
+    }
+  },[selectedClass, message])
   return (
     <div>
+      {message && (
+        <MessageSnackbar
+          message={message}
+          messageType={messageType}
+          handleClose={handleMessageClose}
+
+        />
+      )}
       <FormControl>
         <Select
-          value={selectedClass} 
+          value={selectedClass}
           onChange={(e) => {
             setSelectedClass(e.target.value);
           }}
@@ -85,10 +140,18 @@ const Schedule = () => {
         </Select>
       </FormControl>
       <Button onClick={() => setNewPeriod(true)}>Add new Period</Button>
-      {newPeriod && <ScheduleEvent selectedClass={selectedClass} />}
+      {(newPeriod || edit) && (
+        <ScheduleEvent
+          selectedClass={selectedClass}
+          handleEventClose={HandleEventClose}
+          handleNewMessage={handleNewMessage}
+          edit={edit}
+          selectedEventId={selectedEventId}
+        />
+      )}
       <Calendar
         localizer={localizer}
-        events={myEventsList}
+        events={events}
         defaultView="week"
         views={["week", "day", "agenda"]}
         step={30}
@@ -96,6 +159,7 @@ const Schedule = () => {
         min={new Date(1970, 1, 1, 10, 0, 0)}
         startAccessor="start"
         endAccessor="end"
+        onSelectEvent={handleSelectEvent}
         max={new Date(1970, 1, 1, 17, 0, 0)}
         defaultDate={new Date()}
         showMultiDayTimes

@@ -3,9 +3,10 @@ import Schedule from "../models/schedule.model.js";
 
 export const getScheduleWithClass = async(req, res) => {
     try {
+        console.log(req.params.id);
         const classId = req.params.id;
         const schoolId = req.user.schoolId;
-        const schedules = await Schedule.find({ school: schoolId, class: classId });
+        const schedules = await Schedule.find({ school: schoolId, class: classId }).populate(["teacher", "subject"]);
         res.status(200).json({ success: true, message: "Subjects fetched successfully.", data: schedules });
 
     } catch (error) {
@@ -30,6 +31,19 @@ export const createSchedule = async(req, res) => {
 
     } catch (error) {    
         console.log("Error in createSchedule Controller :", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+export const getScheduleWithId = async(req, res) => {
+    try {
+        const id = req.params.id;
+        const schoolId = req.user.schoolId;
+        const schedule = (await Schedule.find({ school: schoolId, _id: id }))[0]
+        res.status(200).json({ success: true, message: "Subjects fetched successfully.", data: schedule });
+
+    } catch (error) {
+        console.log("Error in getScheduleWithClass Controller :", error);
         res.status(500).json({ success: false, message: error.message });
     }
 }
