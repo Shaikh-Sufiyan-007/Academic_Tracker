@@ -66,7 +66,6 @@ export default function Teacher() {
     setEdit(true)
     setEditId(id)
     const filteredTeacher = teachers.filter((teacher) => teacher._id === id)
-    console.log(filteredTeacher)
     Formik.setFieldValue('email', filteredTeacher[0].email)
     Formik.setFieldValue('name', filteredTeacher[0].name)
     Formik.setFieldValue('age', filteredTeacher[0].age)
@@ -79,7 +78,6 @@ export default function Teacher() {
       axios
          .delete(`http://localhost:5000/api/teacher/delete/${id}`)
          .then((res) => {
-           console.log(res);
            setMessage(res.data.message);
            setMessageType("success");
          })
@@ -105,7 +103,6 @@ export default function Teacher() {
     initialValues,
     validationSchema: edit ? teacherEditSchema :teacherSchema,
     onSubmit: (values) => {
-      console.log("Register submit values: ", values);
 
       if(edit) {
         const formData = new FormData()
@@ -126,7 +123,6 @@ export default function Teacher() {
         axios
         .patch(`http://localhost:5000/api/teacher/update/${editId}`, formData)
         .then((res) => {
-          console.log(res);
           setMessage(res.data.message);
           setMessageType("success");
           Formik.resetForm();
@@ -152,7 +148,6 @@ export default function Teacher() {
         axios
           .post(`http://localhost:5000/api/teacher/register`, formData)
           .then((res) => {
-            console.log(res);
             setMessage(res.data.message);
             setMessageType("success");
             Formik.resetForm();
@@ -205,7 +200,6 @@ export default function Teacher() {
       .get(`${baseApi}/teacher/all`, { params })
       .then((res) => {
         setTeachers(res.data.teachers);
-        console.log(res);
       })
       .catch((e) => {
         console.log("Error in fetching classes", e);

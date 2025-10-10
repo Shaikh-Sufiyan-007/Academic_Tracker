@@ -1,7 +1,7 @@
 import './App.css'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import School from './school/School'
-import Attendance from './school/components/attendance/Attendance'
+import AttendanceStudentList from './school/components/attendance/AttendanceStudentList'
 import Dashboard from './school/components/dashboard/Dashboard'
 import Class from './school/components/class/Class'
 import Examinations from './school/components/examinations/Examinations'
@@ -41,7 +41,7 @@ function App() {
             <Route index element={<Dashboard />} />
 
             <Route path='dashboard' element={<Dashboard />} />
-            <Route path='attendance' element={<Attendance />} />
+            <Route path='attendance' element={<AttendanceStudentList />} />
             <Route path='class' element={<Class />} />
             <Route path='examinations' element={<Examinations />} />
             <Route path='notice' element={<Notice />} />

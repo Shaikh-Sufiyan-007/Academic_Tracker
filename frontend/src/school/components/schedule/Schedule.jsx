@@ -78,7 +78,6 @@ const Schedule = () => {
   const handleSelectEvent = (event) => {
     setEdit(true)
     setSelectedEventId(event.id)
-    console.log(event)
   }
 
   useEffect(() => {

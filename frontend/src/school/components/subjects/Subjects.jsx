@@ -35,7 +35,6 @@ const Subjects = () => {
   const [editId, setEditId] = useState(null)
 
   const handleEdit = (id, subject_name, subject_code, credits, subject_type, branch_name, branch_code, year, semester) => {
-    console.log(id)
     setEdit(true);
     setEditId(id);
     Formik.setFieldValue("subject_name", subject_name)
@@ -64,9 +63,7 @@ const Subjects = () => {
   }
 
   const handleDelete = (id) => {
-    console.log(id)
     axios.delete(`${baseApi}/subject/delete/${id}`).then(res => {
-      console.log(res)
       setMessage(res.data.message)
       setMessageType('success')
     }).catch(e => {
@@ -80,7 +77,6 @@ const Subjects = () => {
     initialValues: {subject_name: "", subject_code: "", credits: "", subject_type: "", branch_name: "", branch_code: "", year: "", semester: ""},
     validationSchema: subjectSchema,
     onSubmit: (values) => {
-      console.log(values)
 
       if(edit) {
         axios.patch(`${baseApi}/subject/update/${editId}`, {...values}).then(res => {
