@@ -25,9 +25,8 @@ export const markAttendance = async(req, res) => {
 export const getAttendance = async(req, res) => {
     try {
         const {studentId} = req.params;
-        const schoolId = req.user.schoolId;
         
-        const attendance = await Attendance.find({school: schoolId, student: studentId}).populate("student");
+        const attendance = await Attendance.find({ student: studentId}).populate("student");
 
         res.status(200).json({success: true, message: "Attendance fetched successfully.", data: attendance});
     } catch (error) {

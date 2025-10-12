@@ -33,6 +33,19 @@ export const getAllClasses = async (req, res) => {
     }
 }
 
+export const getSingleClass = async(req, res) => {
+    try {
+        const schoolId = req.user.schoolId;
+        const classId = req.params.id;
+
+        const singleClass = await Class.findOne({ _id: classId, school: schoolId }).populate("attendee");
+        res.status(200).json({ success: true, message: "Single class fetched successfully.", data: singleClass });
+    } catch (error) {
+        console.log("Error in getSingleClass Controller :", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
 export const updateClassWithId = async(req, res) => {
     try {
         let id = req.params.id;
