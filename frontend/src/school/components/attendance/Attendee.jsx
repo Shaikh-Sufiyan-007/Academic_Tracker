@@ -62,11 +62,11 @@ const Attendee = ({ classId, handleMessage, message }) => {
       <h1>Attendee</h1>
       <Box>
         {attendee && <Box sx={{display: 'flex', justifyContent: 'center'}} component={'div'}>
-          <Typography variant="h5">Attendee Teacher :</Typography>
-          <Typography variant="h5">{attendee.name}</Typography>
+          <Typography variant="h6" sx={{marginTop: '10px'}}>Attendee Teacher :</Typography>
+          <Typography variant="h6" sx={{marginTop: '10px'}}>{attendee.name}</Typography>
         </Box>}
         
-        <FormControl sx={{ width: "230px", marginLeft: "5px" }}>
+        <FormControl sx={{ width: "230px", marginLeft: "5px",marginTop: "20px" }}>
           <InputLabel id="demo-simple-select-label">Teacher Name</InputLabel>
           <Select
             label="Select Teachers"
@@ -86,7 +86,7 @@ const Attendee = ({ classId, handleMessage, message }) => {
               })}
           </Select>
         </FormControl>
-        <Button onClick={handleSubmit}>{attendee ? "Change Attendee" : "Select Attendee"}</Button>
+        <Button onClick={handleSubmit} sx={{marginTop: '20px'}}>{attendee ? "Change Attendee" : "Select Attendee"}</Button>
       </Box>
     </>
   );
