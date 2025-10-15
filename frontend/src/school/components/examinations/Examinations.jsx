@@ -45,6 +45,11 @@ export default function Examinations() {
       setMessageType(type)
     }
 
+      const dateFormate = (date) => {
+    const jsDate = new Date(date);
+    return jsDate.getDate() + "-" + (+jsDate.getMonth()+1) + "-" + jsDate.getFullYear()
+  }
+
   const initialValues = {
     date: "",
     subject: "",
@@ -86,6 +91,7 @@ export default function Examinations() {
     try {
       const response = await axios.get(`${baseApi}/class/all`);
       setClasses(response.data.data);
+      setSelectedClass(response.data.data[0]._id)
       console.log("classes", response);
     } catch (error) {
       console.log(error);
@@ -93,13 +99,25 @@ export default function Examinations() {
   };
 
   const fetchExamination = async() => {
-    
+    try {
+      if(selectedClass) {
+        const response = await axios.get(`${baseApi}/examination/class/${selectedClass}`)
+        setExaminations(response.data.data)
+      }
+    } catch (error) {
+      console.log(error);
+
+    }
   }
 
   useEffect(() => {
-    fetchSubjects();
     fetchClasses()
-  }, [])
+  },[])
+
+  useEffect(() => {
+    fetchExamination();
+    fetchSubjects();
+  }, [message, selectedClass])
 
 
   return (
@@ -205,7 +223,7 @@ export default function Examinations() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="right">Exam Type</TableCell>
+              <TableCell align="right">Exam Date</TableCell>
               <TableCell align="right">Subject</TableCell>
               <TableCell align="right">Exam Type</TableCell>
               <TableCell align="right">Actions</TableCell>
@@ -214,15 +232,15 @@ export default function Examinations() {
           <TableBody>
             {examinations.map((examination) => (
               <TableRow
-                key={examination.name}
+                key={examination._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="right" component="th" scope="row">
-                  {row.name}
+                  {dateFormate(examination.examDate)}
                 </TableCell>
-                <TableCell align="right">{examination.calories}</TableCell>
-                <TableCell align="right">{examination.fat}</TableCell>
-                <TableCell align="right">{examination.carbs}</TableCell>
+                <TableCell align="right">{examination.subject?examination.subject.subject_name:""}</TableCell>
+                <TableCell align="right">{examination.examType}</TableCell>
+                <TableCell align="right">"ACTION"</TableCell>
               </TableRow>
             ))}
           </TableBody>

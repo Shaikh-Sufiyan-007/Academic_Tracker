@@ -50,7 +50,7 @@ export const getAllExaminationsByClass = async (req, res) => {
     const examinations = await Examination.find({
       class: classId,
       school: schoolId,
-    });
+    }).populate('subject')
     res
       .status(200)
       .json({
