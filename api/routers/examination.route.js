@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/create', authMiddleware(['SCHOOL']), newExamination)
 router.get('/all', authMiddleware(['SCHOOL']), getAllExaminations)
 router.get('/class/:id', authMiddleware(['SCHOOL', 'TEACHER', 'STUDENT']), getAllExaminationsByClass)
-router.patch('/update/:id', authMiddleware(['SCHOOL']), updateExaminationWithId)
+router.post('/update/:id', authMiddleware(['SCHOOL']), updateExaminationWithId)
 router.delete('/delete/:id', authMiddleware(['SCHOOL']), deleteExaminationWithId)
 
 export default router;
