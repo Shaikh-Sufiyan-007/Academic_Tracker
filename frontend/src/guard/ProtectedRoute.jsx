@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext';
 
-const ProtectedRoute = ({children, allowedRoles=[]}) => {
+const ProtectedRoute = ({children, allowedRoles}) => {
 
     const {user, authenticated} = useContext(AuthContext)
     const [checked, setChecked] = useState(false)

@@ -29,6 +29,7 @@ import NoticeStudent from './student/components/notice/NoticeStudent'
 import ProtectedRoute from './guard/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import AttendanceDetails from './school/components/attendance/AttendanceDetails'
+import LogOut from './client/components/logout/LogOut'
 
 function App() {
 
@@ -78,6 +79,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
+            <Route path='/logout' element={<LogOut />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -34,7 +34,6 @@ const Notice = () => {
   const [editId, setEditId] = useState(null);
 
   const handleEdit = (id, title, message, audience) => {
-    console.log(id);
     setEdit(true);
     setEditId(id);
     Formik.setFieldValue("title", title);
@@ -54,7 +53,6 @@ const Notice = () => {
       axios
         .delete(`${baseApi}/notice/delete/${id}`)
         .then((res) => {
-          console.log(res);
           setMessage(res.data.message);
           setMessageType("success");
         })
@@ -70,7 +68,6 @@ const Notice = () => {
     initialValues: { title: "", message: "", audience: "" },
     validationSchema: noticeSchema,
     onSubmit: (values) => {
-      console.log(values);
 
       if (edit) {
         axios
@@ -89,7 +86,6 @@ const Notice = () => {
         axios
           .post(`${baseApi}/notice/create`, { ...values })
           .then((res) => {
-            console.log(res);
             setMessage(res.data.message);
             setMessageType("success");
           })
