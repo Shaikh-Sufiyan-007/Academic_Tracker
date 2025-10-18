@@ -16,20 +16,15 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import {Outlet, useNavigate} from 'react-router-dom';
 
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
-import PeopleIcon from '@mui/icons-material/People';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import EventIcon from '@mui/icons-material/Event';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import ExplicitIcon from '@mui/icons-material/Explicit';
 import BarChartIcon from '@mui/icons-material/BarChart'
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import HomeIcon from '@mui/icons-material/Home';
+import LogoutIcon from '@mui/icons-material/Logout';  
 
 
 const drawerWidth = 240;
@@ -131,6 +126,7 @@ export default function Teacher() {
     {link: '/teacher/attendance', component: "Attendance", icon: BarChartIcon},
     {link: '/teacher/examinations', component: "Examinations", icon: ExplicitIcon},
     {link: '/teacher/notice', component: "Notice", icon: NotificationsIcon},
+    {link: '/logout  ', component: "LogOut", icon: LogoutIcon},
   ]
 
   const navigate = useNavigate()
