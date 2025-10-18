@@ -5,7 +5,7 @@ import { authMiddleware } from "../auth/auth.js";
 const router = express.Router();
 
 router.post('/create', authMiddleware(['SCHOOL']), createClass)
-router.get('/all', authMiddleware(['SCHOOL']), getAllClasses)
+router.get('/all', authMiddleware(['SCHOOL', 'TEACHER']), getAllClasses)
 router.get('/single/:id', authMiddleware(['SCHOOL']), getSingleClass)
 router.patch('/update/:id', authMiddleware(['SCHOOL']), updateClassWithId)
 router.delete('/delete/:id', authMiddleware(['SCHOOL']), deleteClassWithId)

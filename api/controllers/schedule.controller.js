@@ -3,7 +3,6 @@ import Schedule from "../models/schedule.model.js";
 
 export const getScheduleWithClass = async(req, res) => {
     try {
-        console.log(req.params.id);
         const classId = req.params.id;
         const schoolId = req.user.schoolId;
         const schedules = await Schedule.find({ school: schoolId, class: classId }).populate(["teacher", "subject"]);

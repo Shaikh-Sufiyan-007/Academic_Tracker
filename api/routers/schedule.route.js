@@ -5,7 +5,7 @@ import { createSchedule, deleteScheduleWithId, getScheduleWithClass, getSchedule
 const router = express.Router();
 
 router.post('/create', authMiddleware(['SCHOOL']), createSchedule)
-router.get('/fetch-with-class/:id', authMiddleware(['SCHOOL']), getScheduleWithClass)
+router.get('/fetch-with-class/:id', authMiddleware(['SCHOOL', "TEACHER"]), getScheduleWithClass)
 router.get('/fetch/:id', authMiddleware(['SCHOOL']), getScheduleWithId)
 router.post('/update/:id', authMiddleware(['SCHOOL']), updateScheduleWithId)
 router.delete('/delete/:id', authMiddleware(['SCHOOL']), deleteScheduleWithId)
