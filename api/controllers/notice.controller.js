@@ -30,6 +30,31 @@ export const getAllNotices = async (req, res) => {
     }
 }
 
+export const getTeacherNotices = async(req, res) => {
+    try {
+        
+        const schoolId = req.user.schoolId;
+        const allNotices = await Notice.find({ school: schoolId, audience: "teacher" });
+        res.status(200).json({ success: true, message: "Notice fetched successfully.", data: allNotices });
+    } catch (error) {
+        console.log("Error in getTeacherNotices Controller :", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+export const getStudentNotices = async(req, res) => {
+    try {
+        
+        const schoolId = req.user.schoolId;
+        const allNotices = await Notice.find({ school: schoolId, audience: "student" });
+        res.status(200).json({ success: true, message: "Notice fetched successfully.", data: allNotices });
+        
+    } catch (error) {
+        console.log("Error in getStudentNotices Controller :", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
 export const updateNoticeWithId = async(req, res) => {
     try {
         let id = req.params.id;
