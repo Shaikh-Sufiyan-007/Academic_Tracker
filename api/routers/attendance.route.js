@@ -4,8 +4,8 @@ import { checkAttendance, getAttendance, markAttendance } from "../controllers/a
 
 const router = express.Router();
 
-router.post('/marks', authMiddleware(['TEACHER']), markAttendance)
+router.post('/mark', authMiddleware(['TEACHER']), markAttendance)
 router.get('/:studentId', authMiddleware(['SCHOOL']), getAttendance)
-router.get('/check/:classId', authMiddleware(['SCHOOL']), checkAttendance)
+router.get('/check/:classId', authMiddleware(['TEACHER']), checkAttendance)
 
 export default router

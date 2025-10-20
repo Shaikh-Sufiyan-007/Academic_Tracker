@@ -46,6 +46,19 @@ export const getSingleClass = async(req, res) => {
     }
 }
 
+export const getAttendeeClass = async(req, res) => {
+    try {
+        const schoolId = req.user.schoolId;
+        const attendeeId = req.user.id;
+
+        const singleClass = await Class.find({ attendee: attendeeId, school: schoolId })
+        res.status(200).json({ success: true, message: "Attendee class fetched successfully.", data: singleClass });
+    } catch (error) {
+        console.log("Error in getAttendeeClass Controller :", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
 export const updateClassWithId = async(req, res) => {
     try {
         let id = req.params.id;

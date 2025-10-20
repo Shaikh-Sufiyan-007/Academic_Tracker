@@ -38,11 +38,10 @@ export const getAttendance = async(req, res) => {
 export const checkAttendance = async(req, res) => {
     try {
         const today = moment().startOf('day')
-        const classId = req.params;
         const attendanceForToday = await Attendance.findOne({
-            class: classId,
+            class: req.params.classId,
             date: {
-                $gt: today.toDate(),
+                $gte: today.toDate(),
                 $lt: moment(today).endOf('day').toDate()
             }
         })

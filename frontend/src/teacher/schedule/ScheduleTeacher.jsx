@@ -50,7 +50,7 @@ const ScheduleTeacher = () => {
     },
   ];
 
-  const [events, setEvents] = useState(myEventsList)
+  const [events, setEvents] = useState([])
 
 
 

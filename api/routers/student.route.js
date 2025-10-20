@@ -5,7 +5,7 @@ import { deleteStudentWithId, getStudentOwnData, getStudentsWithQuery, getStuden
 const router = express.Router();
 
 router.post('/register', authMiddleware(['SCHOOL']), registerStudent)
-router.get('/all', authMiddleware(['SCHOOL']), getStudentsWithQuery)
+router.get('/all', authMiddleware(['SCHOOL', 'TEACHER']), getStudentsWithQuery)
 router.post('/login', loginStudent)
 router.patch('/update/:id', authMiddleware(['SCHOOL']), updateStudent) // AUTHENTICATED USER FOR UPDATE
 router.get('/fetch-single', authMiddleware(['STUDENT']), getStudentOwnData)
