@@ -68,6 +68,13 @@ export default function StudentDetails() {
 
                 <TableRow>
                   <TableCell>
+                    <b>Section: </b>
+                  </TableCell>
+                  <TableCell align="right">{studentDetails.branch.branch_section}</TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell>
                     <b>Year: </b>
                   </TableCell>
                   <TableCell align="right">{studentDetails.branch.class_num} Year</TableCell>
