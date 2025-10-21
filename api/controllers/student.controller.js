@@ -149,7 +149,7 @@ export const getStudentOwnData = async (req, res) => {
   try {
     const id = req.user.id;
     const schoolId = req.user.schoolId;
-    const student = await Student.findById({ _id: id, school: schoolId })
+    const student = await Student.findById({ _id: id, school: schoolId }).populate("branch")
       .select(["-password"]);
     if (!student) {
       return res

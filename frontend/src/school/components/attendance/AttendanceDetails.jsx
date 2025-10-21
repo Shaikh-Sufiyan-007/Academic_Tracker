@@ -48,9 +48,9 @@ const AttendanceDetails = () => {
       setAttendanceData(response.data.data);
 
       response.data.data.forEach((attendance) => {
-          if(attendance.status === "Present") {   
+          if(attendance.status === "present") {   
             setPresent(present + 1)
-          } else if(attendance.status === "Absent") {
+          } else if(attendance.status === "absent") {
               setAbsent(absent + 1)
           }
       })

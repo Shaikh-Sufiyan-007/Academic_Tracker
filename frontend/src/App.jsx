@@ -57,11 +57,11 @@ function App() {
           {/* STUDENT ROUTE */}
 
           <Route path='student' element={<ProtectedRoute allowedRoles={['STUDENT']}><Student /></ProtectedRoute>}>
-            <Route index element={StudentDetails} />
-            <Route path='schedule' element={ScheduleStudent} />
-            <Route path='attendance' element={AttendanceStudent} />
-            <Route path='examinations' element={ExaminationStudent} />
-            <Route path='notice' element={NoticeStudent} />
+            <Route index element={<StudentDetails />} />
+            <Route path='schedule' element={<ScheduleStudent />} />
+            <Route path='attendance' element={<AttendanceStudent />} />
+            <Route path='examinations' element={<ExaminationStudent />} />
+            <Route path='notice' element={<NoticeStudent />} />
           </Route>
 
           {/* TEACHER ROUTE */}
