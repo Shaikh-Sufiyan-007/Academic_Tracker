@@ -24,7 +24,7 @@ app.use(cors(corsOption))
 app.use(cookieParser())
 
 // MONGODB CONNECTION
- mongoose.connect(`mongodb://localhost:27017/academictracker`).then(db => {
+ mongoose.connect(`${process.env.MONGODB_URI}/academicTracker`).then(db => {
     console.log("Database is connected successfully")
  }).catch(err => {
      console.log("Database is not connected ", err)
