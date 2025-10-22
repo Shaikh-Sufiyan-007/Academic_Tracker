@@ -27,14 +27,20 @@ import AttendanceStudent from './student/components/attedance/AttendanceStudent'
 import ExaminationStudent from './student/components/examination/ExaminationStudent'
 import NoticeStudent from './student/components/notice/NoticeStudent'
 import ProtectedRoute from './guard/ProtectedRoute'
-import { AuthProvider } from './context/AuthContext'
+import { AuthContext, AuthProvider } from './context/AuthContext'
 import AttendanceDetails from './school/components/attendance/AttendanceDetails'
 import LogOut from './client/components/logout/LogOut'
+import DraggableButton from './client/utility_components/draggable/DraggableButton'
+import { ThemeProvider } from '@emotion/react'
+import { useContext } from 'react'
+import darkTheme from './client/utility_components/DarkTheme/darkTheme'
+import lightTheme from './client/utility_components/LightTheme/lightTheme'
 
 function App() {
-
+  const {dark} = useContext(AuthContext)
   return (
-    <AuthProvider>
+      <ThemeProvider theme={dark ? darkTheme : lightTheme}>
+      <DraggableButton />
       <BrowserRouter>
         <Routes>
           {/* SCHOOL ROUTE */}
@@ -83,7 +89,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </AuthProvider>
+      </ThemeProvider>
   )
 }
 
