@@ -44,7 +44,6 @@ const AttendanceDetails = () => {
   const fetchAttendanceData = async () => {
     try {
       const response = await axios.get(`${baseApi}/attendance/${studentId}`);
-      console.log(response);
       setAttendanceData(response.data.data);
 
       response.data.data.forEach((attendance) => {

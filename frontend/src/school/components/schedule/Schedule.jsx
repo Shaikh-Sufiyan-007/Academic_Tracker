@@ -19,6 +19,7 @@ import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
 import { baseApi } from "../../../environment";
 import MessageSnackbar from "../../../basic-utility-components/snackbar/MessageSnackbar";
+import AddIcon from "@mui/icons-material/Add";
 
 const locales = {
   "en-US": enUS,
@@ -41,9 +42,9 @@ const Schedule = () => {
   };
 
   const handleNewMessage = (msg, type) => {
-    setMessage(msg)
-    setMessageType(type)
-  }
+    setMessage(msg);
+    setMessageType(type);
+  };
 
   const [classes, setClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
@@ -65,20 +66,19 @@ const Schedule = () => {
     },
   ];
 
-  const [events, setEvents] = useState(myEventsList)
-
+  const [events, setEvents] = useState(myEventsList);
 
   const HandleEventClose = () => {
     setNewPeriod(false);
-    setEdit(false)
-    setSelectedEventId(null)
+    setEdit(false);
+    setSelectedEventId(null);
   };
-  const [edit, setEdit] = useState(false)
-  const [selectedEventId, setSelectedEventId] = useState(null)
+  const [edit, setEdit] = useState(false);
+  const [selectedEventId, setSelectedEventId] = useState(null);
   const handleSelectEvent = (event) => {
-    setEdit(true)
-    setSelectedEventId(event.id)
-  }
+    setEdit(true);
+    setSelectedEventId(event.id);
+  };
 
   useEffect(() => {
     axios
@@ -93,23 +93,25 @@ const Schedule = () => {
   }, []);
 
   useEffect(() => {
-    if(selectedClass) {
-
-      axios.get(`${baseApi}/schedule/fetch-with-class/${selectedClass}`).then(res => {
-        const respData = res.data.data.map(x => {
-          return ({
-            id: x._id,
-            title: `Sub: ${x.subject.subject_name} (${x.subject.subject_code}), Teacher: ${x.teacher.name}`,
-            start: new Date(x.startTime),
-            end: new Date(x.endTime)
-          })
+    if (selectedClass) {
+      axios
+        .get(`${baseApi}/schedule/fetch-with-class/${selectedClass}`)
+        .then((res) => {
+          const respData = res.data.data.map((x) => {
+            return {
+              id: x._id,
+              title: `Sub: ${x.subject.subject_name} (${x.subject.subject_code}), Teacher: ${x.teacher.name}`,
+              start: new Date(x.startTime),
+              end: new Date(x.endTime),
+            };
+          });
+          setEvents(respData);
         })
-        setEvents(respData)
-      }).catch(e => {
-        console.log("Error in fetching schedule", e)
-      })
+        .catch((e) => {
+          console.log("Error in fetching schedule", e);
+        });
     }
-  },[selectedClass, message])
+  }, [selectedClass, message]);
   return (
     <div>
       {message && (
@@ -117,7 +119,6 @@ const Schedule = () => {
           message={message}
           messageType={messageType}
           handleClose={handleMessageClose}
-
         />
       )}
       <FormControl>
@@ -138,7 +139,27 @@ const Schedule = () => {
             })}
         </Select>
       </FormControl>
-      <Button onClick={() => setNewPeriod(true)}>Add new Period</Button>
+      <br />
+      <Button
+        variant="contained"
+        onClick={() => setNewPeriod(true)}
+        startIcon={<AddIcon />}
+        sx={{
+          backgroundColor: "#1976d2",
+          borderRadius: "6px",
+          marginTop: '15px',
+          marginBottom: '15px',
+          padding: "8px 16px",
+          fontWeight: "500",
+          textTransform: "none",
+          fontSize: "14px",
+          "&:hover": {
+            backgroundColor: "#1565c0",
+          },
+        }}
+      >
+        Add New Period
+      </Button>
       {(newPeriod || edit) && (
         <ScheduleEvent
           selectedClass={selectedClass}

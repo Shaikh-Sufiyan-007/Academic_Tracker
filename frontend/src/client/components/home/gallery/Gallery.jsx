@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function Gallery() {
 
@@ -26,7 +28,6 @@ export default function Gallery() {
 
     useEffect(() => {
         axios.get(`http://localhost:5000/api/school/all`).then(res => {
-        console.log("School ",res)
         setSchools(res.data.schools)
         // setMessage(res.data.message)
         // setMessageType('success')
@@ -59,30 +60,100 @@ export default function Gallery() {
         </ImageList>
 
       <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={{position: 'absolute', top: '50%', left: '50%', 
-            transform: 'translate(-50%, -50%)', 
-            background: 'white',
-            padding: '10px',
-            border: 'none',
-            outline: 'none',
-          }}>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {selectedSchool && selectedSchool.school_name}
-          </Typography>
+  open={open}
+  onClose={handleClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+  sx={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backdropFilter: 'blur(2px)'
+  }}
+>
+  <Box 
+    sx={{
+      position: 'relative',
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      bgcolor: 'background.paper',
+      borderRadius: 2,
+      boxShadow: 24,
+      p: 3,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 2,
+      overflow: 'hidden'
+    }}
+  >
+    {/* Close Button */}
+    <IconButton
+      onClick={handleClose}
+      sx={{
+        position: 'absolute',
+        top: 8,
+        right: 8,
+        bgcolor: 'rgba(0,0,0,0.1)',
+        '&:hover': {
+          bgcolor: 'rgba(0,0,0,0.2)'
+        }
+      }}
+    >
+      <CloseIcon />
+    </IconButton>
 
-          <img
-                // srcSet={`./images/uploaded/school/${ selectedSchool && selectedSchool.img}`}
-                src={selectedSchool && `./images/uploaded/school/${selectedSchool.school_image}`}
-                style={{maxHeight: '80vh'}}
-                alt={"alt"}
-            />
-        </Box>
-      </Modal>
+    {/* School Name */}
+    <Typography 
+      id="modal-modal-title" 
+      variant="h5" 
+      component="h2"
+      sx={{
+        fontWeight: 'bold',
+        color: 'primary.main',
+        textAlign: 'center'
+      }}
+    >
+      {selectedSchool?.school_name}
+    </Typography>
+
+    {/* School Image */}
+    <Box
+      sx={{
+        borderRadius: 1,
+        overflow: 'hidden',
+        boxShadow: 2,
+        maxWidth: '100%'
+      }}
+    >
+      <img 
+        src={selectedSchool && `./images/uploaded/school/${selectedSchool.school_image}`}
+        style={{
+          maxHeight: '70vh',
+          maxWidth: '100%',
+          objectFit: 'contain',
+          display: 'block'
+        }}
+        alt={selectedSchool?.school_name || "School image"}
+      />
+    </Box>
+
+    {/* Additional Info (agar available ho toh) */}
+    {selectedSchool?.description && (
+      <Typography 
+        id="modal-modal-description" 
+        sx={{ 
+          mt: 1,
+          textAlign: 'center',
+          color: 'text.secondary',
+          lineHeight: 1.6
+        }}
+      >
+        {selectedSchool.description}
+      </Typography>
+    )}
+  </Box>
+</Modal>
 
 
     </Box>

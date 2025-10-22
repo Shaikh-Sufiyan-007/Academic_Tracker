@@ -155,7 +155,7 @@ const ScheduleEvent = ({ selectedClass, handleEventClose, handleNewMessage, edit
         </Typography>
         }
         
-        <FormControl fullWidth>
+        <FormControl>
           <InputLabel id="demo-simple-select-label">Teachers</InputLabel>
           <Select
             value={Formik.values.teacher}
@@ -180,7 +180,7 @@ const ScheduleEvent = ({ selectedClass, handleEventClose, handleNewMessage, edit
           </p>
         )}
 
-        <FormControl fullWidth>
+        <FormControl>
           <InputLabel id="demo-simple-select-label">Subjects</InputLabel>
           <Select
             value={Formik.values.subject}
@@ -205,7 +205,7 @@ const ScheduleEvent = ({ selectedClass, handleEventClose, handleNewMessage, edit
           </p>
         )}
 
-        <FormControl fullWidth>
+        <FormControl>
           <InputLabel id="demo-simple-select-label">Periods</InputLabel>
           <Select
             value={Formik.values.period}
@@ -240,13 +240,13 @@ const ScheduleEvent = ({ selectedClass, handleEventClose, handleNewMessage, edit
           </DemoContainer>
         </LocalizationProvider>
 
-        <Button type="submit" variant="contained">
+        <Button sx={{width: '15%'}} type="submit" variant="contained">
           Submit
         </Button>
-        <Button type="button" variant="contained" onClick={handleDelete} color="error">
+        <Button sx={{width: '15%'}} type="button" variant="contained" onClick={handleDelete} color="error">
           Delete
         </Button>
-        <Button type="button" onClick={handleCancel} variant="outlined">
+        <Button sx={{width: '15%'}} type="button" onClick={handleCancel} variant="outlined">
           Cancel
         </Button>
       </Box>

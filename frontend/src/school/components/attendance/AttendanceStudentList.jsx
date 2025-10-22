@@ -63,7 +63,6 @@ export default function AttendanceStudentList() {
       .get(`${baseApi}/class/all`)
       .then((res) => {
         setClasses(res.data.data);
-        console.log(res)
       })
       .catch((e) => {
         console.log("Error in fetching classes", e);

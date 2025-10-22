@@ -70,7 +70,6 @@ const ScheduleTeacher = () => {
     if(selectedClass) {
 
       axios.get(`${baseApi}/schedule/fetch-with-class/${selectedClass}`).then(res => {
-        console.log(res.data.data)
         const respData = res.data.data.map(x => {
           return ({
             id: x._id,

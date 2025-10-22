@@ -53,17 +53,40 @@ const Attendee = ({ classId, handleMessage, message }) => {
     }
 
   useEffect(() => {
-    console.log("Class Id: ", classId);
     fetchClassDetails()
     fetchTeachers();
   }, [classId, message]);
   return (
     <>
-      <h1>Attendee</h1>
       <Box>
         {attendee && <Box sx={{display: 'flex', justifyContent: 'center'}} component={'div'}>
-          <Typography variant="h6" sx={{marginTop: '10px'}}>Attendee Teacher :</Typography>
-          <Typography variant="h6" sx={{marginTop: '10px'}}>{attendee.name}</Typography>
+          <Typography 
+            variant="h6" 
+            sx={{
+                fontWeight: '500',
+                color: '#475569',
+                marginRight: '12px',
+                marginTop: '20px',
+                marginBottom: '10px'
+            }}
+        >
+            Attendee Teacher :
+        </Typography>
+        <Typography 
+            variant="h6" 
+            sx={{
+                fontWeight: '700',
+                background: 'linear-gradient(45deg, #1e293b, #475569)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+                textShadow: '0 1px 2px rgba(0,0,0,0.1)',
+                marginTop: '20px',
+                marginBottom: '10px'
+            }}
+        >
+            {attendee.name}
+        </Typography>
         </Box>}
         
         <FormControl sx={{ width: "230px", marginLeft: "5px",marginTop: "20px" }}>
@@ -86,7 +109,20 @@ const Attendee = ({ classId, handleMessage, message }) => {
               })}
           </Select>
         </FormControl>
-        <Button onClick={handleSubmit} sx={{marginTop: '20px'}}>{attendee ? "Change Attendee" : "Select Attendee"}</Button>
+        <Button onClick={handleSubmit} sx={{
+          color: "white",
+          backgroundColor: "#1976d2",
+          borderRadius: "6px",
+          marginTop: '25px',
+          marginLeft: '20px',
+          padding: "8px 16px",
+          fontWeight: "500",
+          textTransform: "none",
+          fontSize: "14px",
+          "&:hover": {
+            backgroundColor: "#1565c0",
+          },
+        }}>{attendee ? "Change Attendee" : "Select Attendee"}</Button>
       </Box>
     </>
   );

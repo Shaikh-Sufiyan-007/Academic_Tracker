@@ -41,7 +41,6 @@ export default function Register() {
     initialValues,
     validationSchema: registerSchema,
     onSubmit: (values) => {
-      console.log("Register submit values: ", values);
 
       if(file) {
       const formData = new FormData();
@@ -52,7 +51,6 @@ export default function Register() {
       formData.append("password", values.password)
 
       axios.post(`http://localhost:5000/api/school/register`, formData).then(res => {
-        console.log(res)
         setMessage(res.data.message)
         setMessageType('success')
         Formik.resetForm();
@@ -84,7 +82,8 @@ export default function Register() {
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
       paddingTop: "60px",
-      paddingBottom: "60px"
+      paddingBottom: "60px",
+      
       }}>
       {message &&
         <MessageSnackbar message={message} messageType={messageType} handleClose={handleMessageClose} />}
@@ -98,7 +97,8 @@ export default function Register() {
           width: "50vw",
           minWidth: "230px",
           margin: 'auto',
-          background: '#fff'
+          background: '#fff',
+          marginBottom: '40px'
         }}
         noValidate
         autoComplete="off"
@@ -184,7 +184,7 @@ export default function Register() {
           </p>
         )}
 
-        <Button type="submit" variant="contained">Submit</Button>
+        <Button type="submit" sx={{width: '15%', marginBottom: '30px'}} variant="contained">Submit</Button>
       </Box>
     </Box>
   );

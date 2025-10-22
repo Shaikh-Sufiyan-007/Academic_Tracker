@@ -121,7 +121,6 @@ export default function Examinations() {
     try {
       const response = await axios.get(`${baseApi}/subject/all`);
       setSubjects(response.data.data);
-      console.log("subjects", response);
     } catch (error) {
       console.log(error);
     }
@@ -134,7 +133,6 @@ export default function Examinations() {
       const response = await axios.get(`${baseApi}/class/all`);
       setClasses(response.data.data);
       setSelectedClass(response.data.data[0]._id);
-      console.log("classes", response);
     } catch (error) {
       console.log(error);
     }
@@ -264,9 +262,9 @@ export default function Examinations() {
             </p>
           )}
 
-          <Button sx={{ marginTop: "10px" }} type="submit" variant="contained">Submit</Button>
+          <Button sx={{ marginTop: "10px", marginBottom: '15px' }} type="submit" variant="contained">Submit</Button>
           {editId && 
-            <Button sx={{ marginTop: "10px", marginLeft: "10px" }} type="button" onClick={handleEditCancel} color="error" variant="outlined">Cancel</Button>
+            <Button sx={{ marginTop: "10px", marginLeft: "10px", marginBottom: '15px' }} type="button" onClick={handleEditCancel} color="error" variant="outlined">Cancel</Button>
           }
         </Box>
       </Paper>

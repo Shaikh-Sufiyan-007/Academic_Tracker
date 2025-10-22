@@ -65,7 +65,6 @@ const Dashboard = () => {
 
   const fetchSchool = () => {
     axios.get(`${baseApi}/school/fetch-single`).then(res => {
-      console.log(res)
       setSchool(res.data.school)
       setSchoolName(res.data.school.school_name)
     }).catch(e => {

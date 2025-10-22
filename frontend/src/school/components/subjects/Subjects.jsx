@@ -90,7 +90,6 @@ const Subjects = () => {
       })
       } else {
       axios.post(`${baseApi}/subject/create`, {...values}).then(res => {
-        console.log(res)
         setMessage(res.data.message)
         setMessageType('success')
 

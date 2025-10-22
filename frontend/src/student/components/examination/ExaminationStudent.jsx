@@ -45,7 +45,6 @@ export default function ExaminationsStudent() {
         const response = await axios.get(
           `${baseApi}/examination/class/${classId}`
         );
-        console.log(response)
         setExaminations(response.data.data);
       }
     } catch (error) {

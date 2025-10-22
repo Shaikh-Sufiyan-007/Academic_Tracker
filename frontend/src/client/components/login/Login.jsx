@@ -109,7 +109,7 @@ export default function Login() {
         <Typography variant="h2" sx={{ textAlign: "center" }}>
           Login
         </Typography>
-        <FormControl fullWidth>
+        <FormControl sx={{width: "15%"}}>
           <InputLabel id="demo-simple-select-label">Role</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -152,7 +152,7 @@ export default function Login() {
           </p>
         )}
 
-        <Button type="submit" variant="contained">
+        <Button sx={{width: '15%'}} type="submit" variant="contained">
           Submit
         </Button>
       </Box>

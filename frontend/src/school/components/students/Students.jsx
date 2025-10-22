@@ -309,7 +309,7 @@ export default function Students() {
           </p>
         )}
 
-        <FormControl fullWidth>
+        <FormControl>
           <InputLabel id="demo-simple-select-label">Branch Name</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -350,7 +350,7 @@ export default function Students() {
           </p>
         )}
 
-        <FormControl fullWidth>
+        <FormControl>
           <InputLabel id="demo-simple-select-label">Gender</InputLabel>
           <Select
             labelId="demo-simple-select-label"

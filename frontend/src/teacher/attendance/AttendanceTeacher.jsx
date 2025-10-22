@@ -47,7 +47,6 @@ const AttendanceTeacher = () => {
         status,
         classId: selectedClass,
       });
-      console.log("Marking attendance", response);
     } catch (error) {
       console.log(error);
     }
@@ -92,7 +91,6 @@ const AttendanceTeacher = () => {
       if (selectedClass) {
         const responseStudent = await axios.get(`${baseApi}/student/all`, { params: { branch: selectedClass } })
         const responseCheck = await axios.get(`${baseApi}/attendance/check/${selectedClass}`);
-        console.log("Check ",responseCheck)
         if(!responseCheck.data.attendanceTaken){
           setStudents(responseStudent.data.students);
           responseStudent.data.students.forEach((student) => {
@@ -202,7 +200,7 @@ const AttendanceTeacher = () => {
               ))}
             </TableBody>
           </Table>
-          <Button variant="contained" onClick={submitAttendance}>
+          <Button sx={{display: 'flex', margin: 'auto', marginTop: '10px', marginBottom: '10px'}} variant="contained" onClick={submitAttendance}>
             Take Attendance
           </Button>
         </TableContainer>

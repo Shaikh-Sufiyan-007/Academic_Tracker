@@ -304,7 +304,7 @@ export default function Teacher() {
           </p>
         )}
 
-        <FormControl fullWidth>
+        <FormControl>
           <InputLabel id="demo-simple-select-label">Gender</InputLabel>
           <Select
             labelId="demo-simple-select-label"

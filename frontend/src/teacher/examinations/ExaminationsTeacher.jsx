@@ -51,7 +51,6 @@ export default function ExaminationsTeacher() {
       const response = await axios.get(`${baseApi}/class/all`);
       setClasses(response.data.data);
       setSelectedClass(response.data.data[0]._id);
-      console.log("classes", response);
     } catch (error) {
       console.log(error);
     }

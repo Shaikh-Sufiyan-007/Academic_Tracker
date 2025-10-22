@@ -5,12 +5,39 @@ import React from 'react'
 const Footer = () => {
   return (
     <>
-      <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: "20px", marginBottom: "10px" }} component={'div'}>
-
-        <Typography variant='h5'>Academic Tracker</Typography>
-        <Typography variant='p'>Copyright@2025</Typography>
-
-      </Box>
+      <Box 
+            sx={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                flexDirection: 'column', 
+                padding: '30px 20px',
+                backgroundColor: '#f8f9fa',
+                marginTop: '40px'
+            }}
+        >
+            <Typography 
+                variant="h6" 
+                sx={{ 
+                    fontWeight: '600',
+                    color: '#2c3e50',
+                    marginBottom: '8px',
+                    fontSize: '1.3rem'
+                }}
+            >
+                Academic Tracker
+            </Typography>
+            
+            <Typography 
+                variant="body2" 
+                sx={{ 
+                    color: '#7f8c8d',
+                    fontSize: '0.9rem'
+                }}
+            >
+                © 2025 - All Rights Reserved
+            </Typography>
+        </Box>
     </>
   )
 }

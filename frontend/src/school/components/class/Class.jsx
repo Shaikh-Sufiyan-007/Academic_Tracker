@@ -31,7 +31,6 @@ const Class = () => {
   const [editId, setEditId] = useState(null)
 
   const handleEdit = (id, class_text, class_num, branch_code, branch_section) => {
-    console.log(id)
     setEdit(true);
     setEditId(id);
     Formik.setFieldValue("class_text", class_text)
@@ -52,9 +51,7 @@ const Class = () => {
   }
 
   const handleDelete = (id) => {
-    console.log(id)
     axios.delete(`${baseApi}/class/delete/${id}`).then(res => {
-      console.log(res)
       setMessage(res.data.message)
       setMessageType('success')
     }).catch(e => {
@@ -68,7 +65,6 @@ const Class = () => {
     initialValues: {class_text: "", class_num: "", branch_code: "", branch_section: ""},
     validationSchema: classSchema,
     onSubmit: (values) => {
-      console.log(values)
 
       if(edit) {
         axios.patch(`${baseApi}/class/update/${editId}`, {...values}).then(res => {
@@ -82,7 +78,6 @@ const Class = () => {
       })
       } else {
       axios.post(`${baseApi}/class/create`, {...values}).then(res => {
-        console.log(res)
         setMessage(res.data.message)
         setMessageType('success')
 
