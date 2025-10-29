@@ -183,9 +183,9 @@ export default function AttendanceStudentList() {
                   {classes &&
                     classes.map((x) => {
                       return (
-                        <MenuItem key={x._id} value={x._id}>
-                          {x.class_text} ({x.branch_code} for section{" "}
-                          {x.branch_section})
+                        <MenuItem key={x?._id} value={x?._id}>
+                          {x?.class_text} ({x?.branch_code} for section{" "}
+                          {x?.branch_section})
                         </MenuItem>
                       );
                     })}
@@ -218,29 +218,29 @@ export default function AttendanceStudentList() {
                   {students &&
                     students.map((student) => (
                       <TableRow
-                        key={student._id}
+                        key={student?._id}
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
                         }}
                       >
                         <TableCell component="th" scope="row">
-                          {student.name}
+                          {student?.name}
                         </TableCell>
-                        <TableCell align="right">{student.gender}</TableCell>
+                        <TableCell align="right">{student?.gender}</TableCell>
                         <TableCell align="right">
-                          {student.student_phone}
-                        </TableCell>
-                        <TableCell align="right">
-                          {student.branch.class_text}-{student.branch.class_num}{" "}
-                          ({student.branch.branch_code}) of section{" "}
-                          {student.branch.branch_section}
+                          {student?.student_phone}
                         </TableCell>
                         <TableCell align="right">
-                          {attendanceData[student._id] !== undefined
-                            ? `${attendanceData[student._id].toFixed(2)}%`
+                          {student?.branch?.class_text}-{student?.branch?.class_num}{" "}
+                          ({student?.branch?.branch_code}) of section{" "}
+                          {student?.branch?.branch_section}
+                        </TableCell>
+                        <TableCell align="right">
+                          {attendanceData[student?._id] !== undefined
+                            ? `${attendanceData[student?._id].toFixed(2)}%`
                             : "No Data"}
                         </TableCell>
-                        <TableCell align="right"><Link to={`/school/attendance/${student._id}`}>Details</Link></TableCell>
+                        <TableCell align="right"><Link to={`/school/attendance/${student?._id}`}>Details</Link></TableCell>
                       </TableRow>
                     ))}
                 </TableBody>

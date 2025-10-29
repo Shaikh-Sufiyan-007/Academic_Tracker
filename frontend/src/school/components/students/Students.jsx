@@ -193,6 +193,8 @@ export default function Students() {
       .get(`${baseApi}/class/all`)
       .then((res) => {
         setClasses(res.data.data);
+        console.log(classes)
+        console.log(res.data.data);
       })
       .catch((e) => {
         console.log("Error in fetching classes", e);
@@ -320,11 +322,11 @@ export default function Students() {
             onChange={Formik.handleChange}
           >
             {classes &&
-              classes.map((x) => {
+              classes?.map((x) => {
                 return (
-                  <MenuItem key={x._id} value={x._id}>
-                    {x.class_text} ({x.branch_code} for section{" "}
-                    {x.branch_section})
+                  <MenuItem key={x?._id} value={x?._id}>
+                    {x?.class_text} ({x?.branch_code} for section{" "}
+                    {x?.branch_section})
                   </MenuItem>
                 );
               })}
@@ -495,9 +497,9 @@ export default function Students() {
             {classes &&
               classes.map((x) => {
                 return (
-                  <MenuItem key={x._id} value={x._id}>
-                    {x.class_text} ({x.branch_code} for section{" "}
-                    {x.branch_section})
+                  <MenuItem key={x?._id} value={x?._id}>
+                    {x?.class_text} ({x?.branch_code} for section{" "}
+                    {x?.branch_section})
                   </MenuItem>
                 );
               })}
@@ -621,9 +623,9 @@ export default function Students() {
                       </Grid>
                       <Grid item xs>
                         <Typography variant="h6" fontWeight="bold">
-                          {student.branch.class_text} (
-                          {student.branch.branch_code}) of section{" "}
-                          {student.branch.branch_section}
+                          {student?.branch?.class_text} (
+                          {student?.branch?.branch_code}) of section{" "}
+                          {student?.branch?.branch_section}
                         </Typography>
                         <Typography
                           variant="body2"
